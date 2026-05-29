@@ -1,0 +1,13 @@
+package pe.uni.poo_v_g7.bibliotecaapp;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BibliotecaAppApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(BibliotecaAppApplication.class, args);
+	}
+
+}
