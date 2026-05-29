@@ -12,7 +12,12 @@ public class ConsultasService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    public LibroCategoriaDto libroCategoria(int idLibro) {
+    /**
+     Obtiene un resumen básico de un libro y su categoría en la base de datos.
+
+     @param idLibro id del libro
+     */
+    public LibroCategoriaDto getLibroCategoria(int idLibro) {
 
         String sql = """
                 SELECT

@@ -16,9 +16,9 @@ public class ConsultasRest {
     private ConsultasService consultasService;
 
     @GetMapping("/libro/categoria/{idLibro}")
-    public ResponseEntity<LibroCategoriaDto> libroCategoria(@PathVariable(name = "idLibro") int idLibro) {
+    public ResponseEntity<LibroCategoriaDto> getLibroCategoria(@PathVariable(name = "idLibro") int idLibro) {
         try {
-            LibroCategoriaDto dto = consultasService.libroCategoria(idLibro);
+            LibroCategoriaDto dto = consultasService.getLibroCategoria(idLibro);
             return ResponseEntity.ok(dto);
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
