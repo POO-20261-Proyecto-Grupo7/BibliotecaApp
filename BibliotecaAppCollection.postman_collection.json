@@ -1,0 +1,32 @@
+{
+  "info": {
+    "_postman_id": "c2833aa2-e704-42bf-8f40-7a6f32514eff",
+    "name": "BibliotecaAppCollection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30773310"
+  },
+  "item": [
+    {
+      "name": "LibroCategoriaTest",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/bbapp/libro/categoria/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "bbapp",
+            "libro",
+            "categoria",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
