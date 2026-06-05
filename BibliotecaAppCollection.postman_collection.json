@@ -1,53 +1,772 @@
 {
-	"info": {
-		"_postman_id": "c2833aa2-e704-42bf-8f40-7a6f32514eff",
-		"name": "BibliotecaAppCollection",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30773310"
-	},
-	"item": [
-		{
-			"name": "LibroCategoriaTest",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/bbapp/libro/categoria/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"bbapp",
-						"libro",
-						"categoria",
-						"1"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "LibroTest",
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "http://localhost:8080/bbapp/libro/1",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"bbapp",
-						"libro",
-						"1"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "c2833aa2-e704-42bf-8f40-7a6f32514eff",
+    "name": "BibliotecaAppCollection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30773310"
+  },
+  "item": [
+    {
+      "name": "ObtenerLibro",
+      "item": [
+        {
+          "name": "LibroTest",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/consulta/libro/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "consulta",
+                "libro",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "LibroCategoriaTest",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/consulta/librocategoria/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "consulta",
+                "librocategoria",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "RegistrarLibro",
+      "item": [
+        {
+          "name": "RegistrarLibroTest_TituloFalla1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_TituloFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\":\"   \"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_AutorFalla1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_AutorFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"  \"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_isbnFalla1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_isbnFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"  \"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_AnioPublicacionFalla1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_AnioPublicacionFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": \"\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_AnioPublicacionFalla3",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": \"sss\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_StockFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": \"  \"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_StockFalla3",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": \"ccc\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_StockFalla4",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": -1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_PrecioFalla1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_PrecioFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"   \"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_PrecioFalla3",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"eawr\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_PrecioFalla4",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"-1\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_CategoriaFalla1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_CategoriaFalla2",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": \"  \"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_CategoriaFalla3",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": \"lll\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_CategoriaFalla4",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": -1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_CategoriaFalla5",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": 123456789\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_Exito",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }

@@ -1,4 +1,4 @@
-package pe.uni.poo_v_g7.bibliotecaapp.rest;
+package pe.uni.poo_v_g7.bibliotecaapp.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -10,8 +10,8 @@ import pe.uni.poo_v_g7.bibliotecaapp.service.ConsultasService;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/bbapp")
-public class ConsultasRest {
+@RequestMapping("/bbapp/api/v1/consulta")
+public class ConsultasController {
 
     @Autowired
     private ConsultasService consultasService;
@@ -26,7 +26,7 @@ public class ConsultasRest {
         }
     }
 
-    @GetMapping("/libro/categoria/{idLibro}")
+    @GetMapping("/librocategoria/{idLibro}")
     public ResponseEntity<LibroCategoriaDto> getLibroCategoria(@PathVariable(name = "idLibro") int idLibro) {
         try {
             LibroCategoriaDto dto = consultasService.getLibroCategoria(idLibro);
