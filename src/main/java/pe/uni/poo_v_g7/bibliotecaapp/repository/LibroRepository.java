@@ -67,7 +67,7 @@ public class LibroRepository {
      @param idCategoria     id de la categoría a la que pertenece el libro
      @return id del libro insertado
      */
-    public int insertLibro(
+    public LibroDto insertLibro(
             String titulo,
             String autor,
             String isbn,
@@ -77,39 +77,82 @@ public class LibroRepository {
             int idCategoria
     ) {
         String sql = """
-            INSERT INTO Libro (
+        INSERT INTO Libro (
+            titulo,
+            autor,
+            isbn,
+            anio_publicacion,
+            stock,
+            precio,
+            id_categoria
+        )
+        OUTPUT
+            INSERTED.id_libro,
+            INSERTED.titulo,
+            INSERTED.autor,
+            INSERTED.isbn,
+            INSERTED.anio_publicacion,
+            INSERTED.stock,
+            INSERTED.precio,
+            INSERTED.id_categoria
+        VALUES (?, ?, ?, ?, ?, ?, ?);
+        """;
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                BeanPropertyRowMapper.newInstance(LibroDto.class),
                 titulo,
                 autor,
                 isbn,
-                anio_publicacion,
+                anioPublicacion,
                 stock,
                 precio,
-                id_categoria
-            )
-            VALUES (?, ?, ?, ?, ?, ?, ?);
-            """;
-
-        KeyHolder keyHolder = new GeneratedKeyHolder();
-
-        jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(
-                    sql,
-                    new String[]{"id_libro"}
-            );
-
-            ps.setString(1, titulo);
-            ps.setString(2, autor);
-            ps.setString(3, isbn);
-            ps.setInt(4, anioPublicacion);
-            ps.setInt(5, stock);
-            ps.setDouble(6, precio);
-            ps.setInt(7, idCategoria);
-
-            return ps;
-        }, keyHolder);
-
-        return keyHolder.getKey().intValue();
+                idCategoria
+        );
     }
+//    public int insertLibro(
+//            String titulo,
+//            String autor,
+//            String isbn,
+//            int anioPublicacion,
+//            int stock,
+//            double precio,
+//            int idCategoria
+//    ) {
+//        String sql = """
+//            INSERT INTO Libro (
+//                titulo,
+//                autor,
+//                isbn,
+//                anio_publicacion,
+//                stock,
+//                precio,
+//                id_categoria
+//            )
+//            VALUES (?, ?, ?, ?, ?, ?, ?);
+//            """;
+//
+//        KeyHolder keyHolder = new GeneratedKeyHolder();
+//
+//        jdbcTemplate.update(connection -> {
+//            PreparedStatement ps = connection.prepareStatement(
+//                    sql,
+//                    new String[]{"id_libro"}
+//            );
+//
+//            ps.setString(1, titulo);
+//            ps.setString(2, autor);
+//            ps.setString(3, isbn);
+//            ps.setInt(4, anioPublicacion);
+//            ps.setInt(5, stock);
+//            ps.setDouble(6, precio);
+//            ps.setInt(7, idCategoria);
+//
+//            return ps;
+//        }, keyHolder);
+//
+//        return keyHolder.getKey().intValue();
+//    }
 
     /**
      Obtiene un resumen básico de un libro y su categoría en la base de datos.

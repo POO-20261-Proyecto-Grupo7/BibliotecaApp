@@ -6,20 +6,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
-import pe.uni.poo_v_g7.bibliotecaapp.service.ConsultasService;
+import pe.uni.poo_v_g7.bibliotecaapp.service.LibroService;
 
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/bbapp/api/v1/consulta")
-public class ConsultasController {
+public class ConsultaController {
 
     @Autowired
-    private ConsultasService consultasService;
+    private LibroService libroService;
 
     @GetMapping("/libro/{idLibro}")
     public ResponseEntity<LibroDto> getLibro(@PathVariable(name = "idLibro") int idLibro) {
         try {
-            LibroDto dto = consultasService.getLibro(idLibro);
+            LibroDto dto = libroService.getLibro(idLibro);
             return ResponseEntity.ok(dto);
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();
@@ -29,7 +29,7 @@ public class ConsultasController {
     @GetMapping("/librocategoria/{idLibro}")
     public ResponseEntity<LibroCategoriaDto> getLibroCategoria(@PathVariable(name = "idLibro") int idLibro) {
         try {
-            LibroCategoriaDto dto = consultasService.getLibroCategoria(idLibro);
+            LibroCategoriaDto dto = libroService.getLibroCategoria(idLibro);
             return ResponseEntity.ok(dto);
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();

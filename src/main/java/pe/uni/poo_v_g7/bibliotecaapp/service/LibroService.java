@@ -4,23 +4,44 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarLibroDto;
-import pe.uni.poo_v_g7.bibliotecaapp.repository.CategoriaRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroRepository;
 
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 @Service
-public class RegistrarService {
+public class LibroService {
 
     private static final Pattern ISBN_PATTERN = Pattern.compile("\\d{10}|\\d{13}");
 
     @Autowired
     private LibroRepository libroRepository;
 
-    @Autowired
-    private CategoriaRepository categoriaRepository;
+    public boolean checkLibroExists(int idLibro) {
+        return libroRepository.checkLibroExists(idLibro);
+    }
+
+    /**
+     Obtiene un libro en la base de datos.
+
+     @param idLibro id del libro
+     @return un objeto LibroDto que representa el libro obtenido
+     */
+    public LibroDto getLibro(int idLibro) {
+        return libroRepository.getLibro(idLibro);
+    }
+
+    /**
+     Obtiene un resumen básico de un libro y su categoría en la base de datos.
+
+     @param idLibro id del libro
+     */
+    public LibroCategoriaDto getLibroCategoria(int idLibro) {
+        return libroRepository.getLibroCategoria(idLibro);
+    }
 
     /**
      * RF-01.1.1 Registrar Libro
@@ -28,13 +49,17 @@ public class RegistrarService {
      * Registra un nuevo libro en el sistema.
      *
      * @param request Un objeto RegistrarLibroDto que contiene los datos del libro a registrar.
+     * @param checkCategoriaExists Un Predicate que verifica si una categoría existe dado su id.
      * @return Un objeto LibroDto que representa el libro registrado.
      */
     @Transactional(
-            propagation = Propagation.REQUIRED,
+            propagation = Propagation.REQUIRES_NEW,
             rollbackFor = Exception.class
     )
-    public LibroDto registrarLibro(RegistrarLibroDto request) {
+    public LibroDto registerLibro(
+            RegistrarLibroDto request,
+            Predicate<Integer> checkCategoriaExists
+    ) {
 
         String titulo = request.getTitulo();
         String autor = request.getAutor();
@@ -100,22 +125,11 @@ public class RegistrarService {
             throw new IllegalArgumentException("La categoría no puede ser nula");
         }
 
-        if (!categoriaRepository.checkCategoriaExists(idCategoria)) {
+        if (!checkCategoriaExists.test(idCategoria)) {
             throw new IllegalArgumentException("La categoría especificada no es válida");
         }
 
-        int newId = libroRepository.insertLibro(
-                titulo,
-                autor,
-                isbn,
-                anioPublicacion,
-                stockInicial,
-                precio,
-                idCategoria
-        );
-
-        return new LibroDto(
-                newId,
+        return libroRepository.insertLibro(
                 titulo,
                 autor,
                 isbn,
