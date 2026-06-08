@@ -3,13 +3,13 @@ package pe.uni.poo_v_g7.bibliotecaapp.repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 
-import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Repository
 public class LibroRepository {
@@ -39,34 +39,40 @@ public class LibroRepository {
         return count != null && count > 0;
     }
 
-    /**
-     Obtiene un libro por su id en la base de datos.
-
-     @param idLibro id del libro
-     */
     public LibroDto getLibro(int idLibro) {
-
         String sql = """
                 SELECT *
                 FROM Libro
                 WHERE id_libro = ?;
                 """;
 
-        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(LibroDto.class), idLibro);
+        return jdbcTemplate.queryForObject(
+                sql,
+                BeanPropertyRowMapper.newInstance(LibroDto.class),
+                idLibro
+        );
     }
 
-    /**
-     Inserta un nuevo libro en la base de datos.
+    public LibroCategoriaDto getLibroCategoria(int idLibro) {
+        String sql = """
+                SELECT
+                    l.id_libro,
+                    l.titulo,
+                    l.autor,
+                    c.nombre AS categoria
+                FROM Libro l
+                INNER JOIN Categoria c
+                    ON l.id_categoria = c.id_categoria
+                WHERE l.id_libro = ?;
+                """;
 
-     @param titulo          título del libro
-     @param autor           autor del libro
-     @param isbn            ISBN del libro
-     @param anioPublicacion año de publicación del libro
-     @param stock           cantidad de stock disponible
-     @param precio          precio del libro
-     @param idCategoria     id de la categoría a la que pertenece el libro
-     @return id del libro insertado
-     */
+        return jdbcTemplate.queryForObject(
+                sql,
+                BeanPropertyRowMapper.newInstance(LibroCategoriaDto.class),
+                idLibro
+        );
+    }
+
     public LibroDto insertLibro(
             String titulo,
             String autor,
@@ -77,26 +83,26 @@ public class LibroRepository {
             int idCategoria
     ) {
         String sql = """
-        INSERT INTO Libro (
-            titulo,
-            autor,
-            isbn,
-            anio_publicacion,
-            stock,
-            precio,
-            id_categoria
-        )
-        OUTPUT
-            INSERTED.id_libro,
-            INSERTED.titulo,
-            INSERTED.autor,
-            INSERTED.isbn,
-            INSERTED.anio_publicacion,
-            INSERTED.stock,
-            INSERTED.precio,
-            INSERTED.id_categoria
-        VALUES (?, ?, ?, ?, ?, ?, ?);
-        """;
+                INSERT INTO Libro (
+                    titulo,
+                    autor,
+                    isbn,
+                    anio_publicacion,
+                    stock,
+                    precio,
+                    id_categoria
+                )
+                OUTPUT
+                    INSERTED.id_libro,
+                    INSERTED.titulo,
+                    INSERTED.autor,
+                    INSERTED.isbn,
+                    INSERTED.anio_publicacion,
+                    INSERTED.stock,
+                    INSERTED.precio,
+                    INSERTED.id_categoria
+                VALUES (?, ?, ?, ?, ?, ?, ?);
+                """;
 
         return jdbcTemplate.queryForObject(
                 sql,
@@ -110,69 +116,194 @@ public class LibroRepository {
                 idCategoria
         );
     }
-//    public int insertLibro(
-//            String titulo,
-//            String autor,
-//            String isbn,
-//            int anioPublicacion,
-//            int stock,
-//            double precio,
-//            int idCategoria
-//    ) {
-//        String sql = """
-//            INSERT INTO Libro (
-//                titulo,
-//                autor,
-//                isbn,
-//                anio_publicacion,
-//                stock,
-//                precio,
-//                id_categoria
-//            )
-//            VALUES (?, ?, ?, ?, ?, ?, ?);
-//            """;
-//
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//
-//        jdbcTemplate.update(connection -> {
-//            PreparedStatement ps = connection.prepareStatement(
-//                    sql,
-//                    new String[]{"id_libro"}
-//            );
-//
-//            ps.setString(1, titulo);
-//            ps.setString(2, autor);
-//            ps.setString(3, isbn);
-//            ps.setInt(4, anioPublicacion);
-//            ps.setInt(5, stock);
-//            ps.setDouble(6, precio);
-//            ps.setInt(7, idCategoria);
-//
-//            return ps;
-//        }, keyHolder);
-//
-//        return keyHolder.getKey().intValue();
-//    }
 
-    /**
-     Obtiene un resumen básico de un libro y su categoría en la base de datos.
+    public LibroDto updateLibro(
+            int idLibro,
+            Consumer<LibroUpdateSpec> configurator
+    ) {
 
-     @param idLibro id del libro
-     */
-    public LibroCategoriaDto getLibroCategoria(int idLibro) {
+        LibroUpdateState state = new LibroUpdateState();
+
+        configurator.accept(state);
+
+        List<String> updates = new ArrayList<>();
+        List<Object> parameters = new ArrayList<>();
+
+        if (state.titulo.isPresent()) {
+            updates.add("titulo = ?");
+            parameters.add(state.titulo.value());
+        }
+
+        if (state.autor.isPresent()) {
+            updates.add("autor = ?");
+            parameters.add(state.autor.value());
+        }
+
+        if (state.isbn.isPresent()) {
+            updates.add("isbn = ?");
+            parameters.add(state.isbn.value());
+        }
+
+        if (state.anioPublicacion.isNull()) {
+            updates.add("anio_publicacion = NULL");
+        } else if (state.anioPublicacion.isPresent()) {
+            updates.add("anio_publicacion = ?");
+            parameters.add(state.anioPublicacion.value());
+        }
+
+        if (state.stock.isPresent()) {
+            updates.add("stock = ?");
+            parameters.add(state.stock.value());
+        }
+
+        if (state.precio.isPresent()) {
+            updates.add("precio = ?");
+            parameters.add(state.precio.value());
+        }
+
+        if (state.idCategoria.isPresent()) {
+            updates.add("id_categoria = ?");
+            parameters.add(state.idCategoria.value());
+        }
+
+        if (updates.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "No se especificó ningún campo para actualizar."
+            );
+        }
 
         String sql = """
-                SELECT
-                    l.id_libro,
-                    l.titulo,
-                    l.autor,
-                    c.nombre AS categoria
-                FROM Libro l
-                INNER JOIN Categoria c
-                    ON l.id_categoria = c.id_categoria
-                WHERE l.id_libro = ?;
-                """;
+            UPDATE Libro
+            SET %s
+            OUTPUT
+                INSERTED.id_libro,
+                INSERTED.titulo,
+                INSERTED.autor,
+                INSERTED.isbn,
+                INSERTED.anio_publicacion,
+                INSERTED.stock,
+                INSERTED.precio,
+                INSERTED.id_categoria
+            WHERE id_libro = ?
+            """.formatted(String.join(", ", updates));
 
-        return jdbcTemplate.queryForObject(sql, BeanPropertyRowMapper.newInstance(LibroCategoriaDto.class), idLibro);
+        parameters.add(idLibro);
+
+        return jdbcTemplate.queryForObject(
+                sql,
+                BeanPropertyRowMapper.newInstance(LibroDto.class),
+                parameters.toArray()
+        );
+    }
+
+    private static final class LibroUpdateState implements LibroUpdateSpec {
+
+        private final NonNullField<String> titulo = new NonNullField<>();
+        private final NonNullField<String> autor = new NonNullField<>();
+        private final NonNullField<String> isbn = new NonNullField<>();
+
+        private final NullableField<Integer> anioPublicacion =
+                new NullableField<>();
+
+        private final NonNullField<Integer> stock =
+                new NonNullField<>();
+
+        private final NonNullField<Double> precio =
+                new NonNullField<>();
+
+        private final NonNullField<Integer> idCategoria =
+                new NonNullField<>();
+
+        @Override
+        public LibroUpdateState setTitulo(String titulo) {
+            this.titulo.set(titulo);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetTitulo() {
+            this.titulo.unset();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setAutor(String autor) {
+            this.autor.set(autor);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetAutor() {
+            this.autor.unset();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setIsbn(String isbn) {
+            this.isbn.set(isbn);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetIsbn() {
+            this.isbn.unset();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setAnioPublicacion(
+                Integer anioPublicacion
+        ) {
+            this.anioPublicacion.set(anioPublicacion);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setAnioPublicacionNull() {
+            this.anioPublicacion.setNull();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetAnioPublicacion() {
+            this.anioPublicacion.unset();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setStock(int stock) {
+            this.stock.set(stock);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetStock() {
+            this.stock.unset();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setPrecio(double precio) {
+            this.precio.set(precio);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetPrecio() {
+            this.precio.unset();
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState setIdCategoria(int idCategoria) {
+            this.idCategoria.set(idCategoria);
+            return this;
+        }
+
+        @Override
+        public LibroUpdateState unsetIdCategoria() {
+            this.idCategoria.unset();
+            return this;
+        }
     }
 }

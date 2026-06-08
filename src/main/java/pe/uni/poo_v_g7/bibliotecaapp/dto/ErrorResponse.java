@@ -12,4 +12,5 @@ public final class ErrorResponse {
     private String mensaje;
     private String timestamp;
     private String path;
+    private StackTraceElement[] stackTrace;
 }

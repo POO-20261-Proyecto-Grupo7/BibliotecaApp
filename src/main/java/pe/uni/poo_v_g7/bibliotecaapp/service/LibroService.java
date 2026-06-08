@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarLibroDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarLibroDto;
@@ -12,10 +13,13 @@ import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroRepository;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
+import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
+
 @Service
 public class LibroService {
 
-    private static final Pattern ISBN_PATTERN = Pattern.compile("\\d{10}|\\d{13}");
+    private static final Pattern ISBN_PATTERN =
+            Pattern.compile("\\d{10}|\\d{13}");
 
     @Autowired
     private LibroRepository libroRepository;
@@ -24,36 +28,16 @@ public class LibroService {
         return libroRepository.checkLibroExists(idLibro);
     }
 
-    /**
-     Obtiene un libro en la base de datos.
-
-     @param idLibro id del libro
-     @return un objeto LibroDto que representa el libro obtenido
-     */
     public LibroDto getLibro(int idLibro) {
         return libroRepository.getLibro(idLibro);
     }
 
-    /**
-     Obtiene un resumen básico de un libro y su categoría en la base de datos.
-
-     @param idLibro id del libro
-     */
     public LibroCategoriaDto getLibroCategoria(int idLibro) {
         return libroRepository.getLibroCategoria(idLibro);
     }
 
-    /**
-     * RF-01.1.1 Registrar Libro
-     * <p>
-     * Registra un nuevo libro en el sistema.
-     *
-     * @param request Un objeto RegistrarLibroDto que contiene los datos del libro a registrar.
-     * @param checkCategoriaExists Un Predicate que verifica si una categoría existe dado su id.
-     * @return Un objeto LibroDto que representa el libro registrado.
-     */
     @Transactional(
-            propagation = Propagation.REQUIRES_NEW,
+            propagation = Propagation.REQUIRED,
             rollbackFor = Exception.class
     )
     public LibroDto registerLibro(
@@ -61,73 +45,70 @@ public class LibroService {
             Predicate<Integer> checkCategoriaExists
     ) {
 
-        String titulo = request.getTitulo();
-        String autor = request.getAutor();
-        String isbn = request.getIsbn();
-        Integer anioPublicacion = request.getAnioPublicacion();
-        Integer stockInicial = request.getStockInicial();
-        Double precio = request.getPrecio();
-        Integer idCategoria = request.getIdCategoria();
+        String titulo = requireNotBlank(
+                requireNonNull(
+                        request.getTitulo(),
+                        "El título del libro no puede ser nulo."
+                ),
+                "El título del libro no puede estar vacío."
+        );
 
-        if (titulo == null) {
-            throw new IllegalArgumentException("El título del libro no puede ser nulo");
-        }
+        String autor = requireNotBlank(
+                requireNonNull(
+                        request.getAutor(),
+                        "El autor del libro no puede ser nulo."
+                ),
+                "El autor del libro no puede estar vacío."
+        );
 
-        if (titulo.trim().isEmpty()) {
-            throw new IllegalArgumentException("El título del libro no puede estar vacío");
-        }
+        String isbn = requireNotBlank(
+                requireNonNull(
+                        request.getIsbn(),
+                        "El ISBN del libro no puede ser nulo."
+                ),
+                "El ISBN del libro no puede estar vacío."
+        );
 
-        if (autor == null) {
-            throw new IllegalArgumentException("El autor del libro no puede ser nulo");
-        }
+        requireTrue(
+                ISBN_PATTERN.matcher(isbn).matches(),
+                "El ISBN del libro debe tener 10 o 13 dígitos."
+        );
 
-        if (autor.trim().isEmpty()) {
-            throw new IllegalArgumentException("El autor del libro no puede estar vacío");
-        }
+        requireFalse(
+                libroRepository.checkLibroExistsByIsbn(isbn),
+                "El ISBN del libro ya existe en el sistema."
+        );
 
-        if (isbn == null) {
-            throw new IllegalArgumentException("El ISBN del libro no puede ser nulo");
-        }
+        Integer anioPublicacion = requireNonNull(
+                request.getAnioPublicacion(),
+                "El año de publicación no puede ser nulo."
+        );
 
-        if (isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("El ISBN del libro no puede estar vacío");
-        }
+        Integer stockInicial = requireNonNegative(
+                requireNonNull(
+                        request.getStockInicial(),
+                        "El stock inicial no puede ser nulo."
+                ),
+                "El stock inicial no puede ser negativo."
+        );
 
-        if (!ISBN_PATTERN.matcher(isbn).matches()) {
-            throw new IllegalArgumentException("El ISBN del libro debe tener 10 o 13 dígitos");
-        }
+        Double precio = requireNonNegative(
+                requireNonNull(
+                        request.getPrecio(),
+                        "El precio no puede ser nulo."
+                ),
+                "El precio no puede ser negativo."
+        );
 
-        if (libroRepository.checkLibroExistsByIsbn(isbn)) {
-            throw new IllegalArgumentException("El ISBN del libro ya existe en el sistema");
-        }
+        Integer idCategoria = requireNonNull(
+                request.getIdCategoria(),
+                "La categoría no puede ser nula."
+        );
 
-        if (anioPublicacion == null) {
-            throw new IllegalArgumentException("El año de publicación no puede ser nulo");
-        }
-
-        if (stockInicial == null) {
-            throw new IllegalArgumentException("El stock inicial no puede ser nulo");
-        }
-
-        if (stockInicial < 0) {
-            throw new IllegalArgumentException("El stock inicial no puede ser negativo");
-        }
-
-        if (precio == null) {
-            throw new IllegalArgumentException("El precio no puede ser nulo");
-        }
-
-        if (precio < 0) {
-            throw new IllegalArgumentException("El precio no puede ser negativo");
-        }
-
-        if (idCategoria == null) {
-            throw new IllegalArgumentException("La categoría no puede ser nula");
-        }
-
-        if (!checkCategoriaExists.test(idCategoria)) {
-            throw new IllegalArgumentException("La categoría especificada no es válida");
-        }
+        requireTrue(
+                checkCategoriaExists.test(idCategoria),
+                "La categoría especificada no existe."
+        );
 
         return libroRepository.insertLibro(
                 titulo,
@@ -137,6 +118,106 @@ public class LibroService {
                 stockInicial,
                 precio,
                 idCategoria
+        );
+    }
+
+    @Transactional(
+            propagation = Propagation.REQUIRED,
+            rollbackFor = Exception.class
+    )
+    public LibroDto updateLibro(
+            int idLibro,
+            ActualizarLibroDto request,
+            Predicate<Integer> checkCategoriaExists
+    ) {
+
+        requireTrue(
+                checkLibroExists(idLibro),
+                "El libro con id " + idLibro + " no existe."
+        );
+
+        return libroRepository.updateLibro(
+                idLibro,
+                spec -> {
+
+                    if (request.getTitulo() != null) {
+
+                        String titulo = requireNotBlank(
+                                requireNonNull(
+                                        request.getTitulo().getValue(),
+                                        "El título del libro no puede ser nulo."
+                                ),
+                                "El título del libro no puede estar vacío."
+                        );
+
+                        spec.setTitulo(titulo);
+                    }
+
+                    if (request.getAutor() != null) {
+
+                        String autor = requireNotBlank(
+                                requireNonNull(
+                                        request.getAutor().getValue(),
+                                        "El autor del libro no puede ser nulo."
+                                ),
+                                "El autor del libro no puede estar vacío."
+                        );
+
+                        spec.setAutor(autor);
+                    }
+
+                    if (request.getAnioPublicacion() != null) {
+
+                        if (request.getAnioPublicacion().getValue() == null) {
+                            spec.setAnioPublicacionNull();
+                        } else {
+                            spec.setAnioPublicacion(
+                                    request.getAnioPublicacion().getValue()
+                            );
+                        }
+                    }
+
+                    if (request.getStock() != null) {
+
+                        Integer stock = requireNonNegative(
+                                requireNonNull(
+                                        request.getStock().getValue(),
+                                        "El stock no puede ser nulo."
+                                ),
+                                "El stock no puede ser negativo."
+                        );
+
+                        spec.setStock(stock);
+                    }
+
+                    if (request.getPrecio() != null) {
+
+                        Double precio = requireNonNegative(
+                                requireNonNull(
+                                        request.getPrecio().getValue(),
+                                        "El precio no puede ser nulo."
+                                ),
+                                "El precio no puede ser negativo."
+                        );
+
+                        spec.setPrecio(precio);
+                    }
+
+                    if (request.getIdCategoria() != null) {
+
+                        Integer idCategoria = requireNonNull(
+                                request.getIdCategoria().getValue(),
+                                "La categoría no puede ser nula."
+                        );
+
+                        requireTrue(
+                                checkCategoriaExists.test(idCategoria),
+                                "La categoría especificada no existe."
+                        );
+
+                        spec.setIdCategoria(idCategoria);
+                    }
+                }
         );
     }
 }

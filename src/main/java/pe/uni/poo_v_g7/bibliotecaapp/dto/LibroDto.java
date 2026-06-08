@@ -18,7 +18,6 @@ public final class LibroDto {
     private String autor;
     @NonNull
     private String isbn;
-    @NonNull
     private Integer anioPublicacion;
     @NonNull
     private Integer stock;

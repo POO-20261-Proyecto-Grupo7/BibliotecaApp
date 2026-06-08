@@ -767,6 +767,44 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "ActualizarCategoria",
+      "item": [
+        {
+          "name": "ActualizarCategoria",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": {\r\n        \"value\": \"Programación Avanzada\"\r\n    },\r\n\r\n    // \"descripcion\": {\r\n    //     \"value\": \"Libros profesionales de desarrollo de software\"\r\n    // }\r\n\r\n    // \"descripcion\": {\r\n    //     // ESTABLECE EN NULO\r\n    // }\r\n\r\n    // Ctrl + K + C : COMENTAR SELECCION\r\n    // Ctrl + K + U : DESCOMENTAR SELECCION\r\n\r\n    \"descripcion\": {\r\n        \"value\": \"Libros de desarrollo de software\"\r\n    }\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/actualizar/categoria/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "actualizar",
+                "categoria",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }
