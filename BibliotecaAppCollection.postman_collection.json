@@ -837,6 +837,44 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "CatalogacionAi",
+      "item": [
+        {
+          "name": "New Request",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"isbn\": \"9780132350884\",\r\n    \"titulo\" : \"Clean Code\",\r\n    \"descripcion\": \"Libros de desarrollo de software\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/ai/catalogacion/catalogar-libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "ai",
+                "catalogacion",
+                "catalogar-libro"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

@@ -14,6 +14,12 @@ java {
 	}
 }
 
+ext {
+	set("springAiVersion", "2.0.0-RC1")
+}
+
+val springAiVersion = "2.0.0-RC1"
+
 repositories {
 	mavenCentral()
 }
@@ -21,7 +27,11 @@ repositories {
 dependencies {
 //	implementation("org.springframework.boot:spring-boot-starter-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+//	implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.ai:spring-ai-starter-model-openai")
+	implementation("com.fasterxml.jackson.core:jackson-databind")
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.microsoft.sqlserver:mssql-jdbc")
@@ -34,6 +44,12 @@ dependencies {
 	testCompileOnly("org.projectlombok:lombok")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	testAnnotationProcessor("org.projectlombok:lombok")
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.springframework.ai:spring-ai-bom:${springAiVersion}")
+	}
 }
 
 tasks.withType<Test> {
