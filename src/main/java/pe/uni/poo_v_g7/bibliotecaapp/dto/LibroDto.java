@@ -8,14 +8,14 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public final class LibroDto {
+public sealed class LibroDto permits LibroDetailedDto {
 
     @NonNull
     private Integer idLibro;
     @NonNull
     private String titulo;
-    @NonNull
-    private String autor;
+//    @NonNull
+//    private String autor;
     @NonNull
     private String isbn;
     private Integer anioPublicacion;
@@ -25,4 +25,6 @@ public final class LibroDto {
     private Double precio;
     @NonNull
     private Integer idCategoria;
+    private String sinopsis;
+    private Integer idEditorial;
 }

@@ -6,8 +6,8 @@ import lombok.*;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public final class CategoriaDto extends CategoriaInfoDto {
+public final class EditorialDto extends EditorialInfoDto {
 
     @NonNull
-    private Integer idCategoria;
+    private Integer idEditorial;
 }

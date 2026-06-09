@@ -765,6 +765,38 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "RegistrarLibroTest_Exito1",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote 2\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523328\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/registrar/libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "registrar",
+                "libro"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     },

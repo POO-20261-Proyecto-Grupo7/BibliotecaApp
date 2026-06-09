@@ -5,10 +5,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarLibroDto;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDetailedDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarLibroDto;
-import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroCommandRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroDetailedQueryRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroQueryRepository;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -18,22 +20,27 @@ import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 @Service
 public class LibroService {
 
-    private static final Pattern ISBN_PATTERN =
-            Pattern.compile("\\d{10}|\\d{13}");
+    private static final Pattern ISBN_PATTERN = Pattern.compile("\\d{10}|\\d{13}");
 
     @Autowired
-    private LibroRepository libroRepository;
+    private LibroQueryRepository libroQueryRepository;
+
+    @Autowired
+    private LibroDetailedQueryRepository libroDetailedQueryRepository;
+
+    @Autowired
+    private LibroCommandRepository libroCommandRepository;
 
     public boolean checkLibroExists(int idLibro) {
-        return libroRepository.checkLibroExists(idLibro);
+        return libroQueryRepository.checkLibroExists(idLibro);
     }
 
     public LibroDto getLibro(int idLibro) {
-        return libroRepository.getLibro(idLibro);
+        return libroQueryRepository.getLibro(idLibro);
     }
 
-    public LibroCategoriaDto getLibroCategoria(int idLibro) {
-        return libroRepository.getLibroCategoria(idLibro);
+    public LibroDetailedDto getLibroDetailed(int idLibro) {
+        return libroDetailedQueryRepository.getLibroDetailed(idLibro);
     }
 
     @Transactional(
@@ -42,7 +49,8 @@ public class LibroService {
     )
     public LibroDto registerLibro(
             RegistrarLibroDto request,
-            Predicate<Integer> checkCategoriaExists
+            Predicate<Integer> checkCategoriaExists,
+            Predicate<Integer> checkEditorialExists
     ) {
 
         String titulo = requireNotBlank(
@@ -51,14 +59,6 @@ public class LibroService {
                         "El título del libro no puede ser nulo."
                 ),
                 "El título del libro no puede estar vacío."
-        );
-
-        String autor = requireNotBlank(
-                requireNonNull(
-                        request.getAutor(),
-                        "El autor del libro no puede ser nulo."
-                ),
-                "El autor del libro no puede estar vacío."
         );
 
         String isbn = requireNotBlank(
@@ -75,7 +75,7 @@ public class LibroService {
         );
 
         requireFalse(
-                libroRepository.checkLibroExistsByIsbn(isbn),
+                libroQueryRepository.checkLibroExistsByIsbn(isbn),
                 "El ISBN del libro ya existe en el sistema."
         );
 
@@ -110,14 +110,23 @@ public class LibroService {
                 "La categoría especificada no existe."
         );
 
-        return libroRepository.insertLibro(
+        String sinopsis = request.getSinopsis();
+
+        Integer idEditorial = request.getIdEditorial();
+
+        if (idEditorial != null && !checkEditorialExists.test(idEditorial)) {
+            throw new IllegalArgumentException("La editorial especificada no existe.");
+        }
+
+        return libroCommandRepository.insertLibro(
                 titulo,
-                autor,
                 isbn,
                 anioPublicacion,
                 stockInicial,
                 precio,
-                idCategoria
+                idCategoria,
+                sinopsis,
+                idEditorial
         );
     }
 
@@ -128,7 +137,8 @@ public class LibroService {
     public LibroDto updateLibro(
             int idLibro,
             ActualizarLibroDto request,
-            Predicate<Integer> checkCategoriaExists
+            Predicate<Integer> checkCategoriaExists,
+            Predicate<Integer> checkEditorialExists
     ) {
 
         requireTrue(
@@ -136,7 +146,7 @@ public class LibroService {
                 "El libro con id " + idLibro + " no existe."
         );
 
-        return libroRepository.updateLibro(
+        return libroCommandRepository.updateLibro(
                 idLibro,
                 spec -> {
 
@@ -151,19 +161,6 @@ public class LibroService {
                         );
 
                         spec.setTitulo(titulo);
-                    }
-
-                    if (request.getAutor() != null) {
-
-                        String autor = requireNotBlank(
-                                requireNonNull(
-                                        request.getAutor().getValue(),
-                                        "El autor del libro no puede ser nulo."
-                                ),
-                                "El autor del libro no puede estar vacío."
-                        );
-
-                        spec.setAutor(autor);
                     }
 
                     if (request.getAnioPublicacion() != null) {
@@ -216,6 +213,25 @@ public class LibroService {
                         );
 
                         spec.setIdCategoria(idCategoria);
+                    }
+
+                    if (request.getSinopsis() != null) {
+
+                        String sinopsis = request.getSinopsis().getValue();
+
+                        spec.setSinopsis(sinopsis);
+                    }
+
+                    if (request.getIdEditorial() != null) {
+
+                        Integer idEditorial = request.getIdEditorial().getValue();
+
+                        requireTrue(
+                                checkEditorialExists.test(idEditorial),
+                                "La editorial especificada no existe."
+                        );
+
+                        spec.setIdEditorial(idEditorial);
                     }
                 }
         );

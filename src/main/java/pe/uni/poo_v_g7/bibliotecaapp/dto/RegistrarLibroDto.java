@@ -10,10 +10,11 @@ import lombok.NoArgsConstructor;
 public final class RegistrarLibroDto {
 
     private String titulo;
-    private String autor;
     private String isbn;
     private Integer anioPublicacion;
     private Integer stockInicial;
     private Double precio;
     private Integer idCategoria;
+    private String sinopsis;
+    private Integer idEditorial;
 }

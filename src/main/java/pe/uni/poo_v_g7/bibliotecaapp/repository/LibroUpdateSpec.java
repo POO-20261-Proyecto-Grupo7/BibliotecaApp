@@ -5,9 +5,6 @@ public interface LibroUpdateSpec {
     LibroUpdateSpec setTitulo(String titulo);
     LibroUpdateSpec unsetTitulo();
 
-    LibroUpdateSpec setAutor(String autor);
-    LibroUpdateSpec unsetAutor();
-
     LibroUpdateSpec setIsbn(String isbn);
     LibroUpdateSpec unsetIsbn();
 
@@ -23,4 +20,12 @@ public interface LibroUpdateSpec {
 
     LibroUpdateSpec setIdCategoria(int idCategoria);
     LibroUpdateSpec unsetIdCategoria();
+
+    LibroUpdateSpec setSinopsis(String sinopsis);
+    LibroUpdateSpec setSinopsisNull();
+    LibroUpdateSpec unsetSinopsis();
+
+    LibroUpdateSpec setIdEditorial(Integer idEditorial);
+    LibroUpdateSpec setIdEditorialNull();
+    LibroUpdateSpec unsetIdEditorial();
 }

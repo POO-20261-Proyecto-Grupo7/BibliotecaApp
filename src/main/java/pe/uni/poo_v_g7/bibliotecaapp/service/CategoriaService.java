@@ -7,7 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.CategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarCategoriaDto;
-import pe.uni.poo_v_g7.bibliotecaapp.repository.CategoriaRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.CategoriaCommandRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.CategoriaQueryRepository;
 
 import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 
@@ -15,10 +16,13 @@ import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 public class CategoriaService {
 
     @Autowired
-    private CategoriaRepository categoriaRepository;
+    private CategoriaQueryRepository categoriaQueryRepository;
+
+    @Autowired
+    private CategoriaCommandRepository categoriaCommandRepository;
 
     public boolean checkCategoriaExists(int idCategoria) {
-        return categoriaRepository.checkCategoriaExists(idCategoria);
+        return categoriaQueryRepository.checkCategoriaExists(idCategoria);
     }
 
     public CategoriaDto getCategoria(int idCategoria) {
@@ -29,7 +33,7 @@ public class CategoriaService {
             );
         }
 
-        return categoriaRepository.getCategoria(idCategoria);
+        return categoriaQueryRepository.getCategoria(idCategoria);
     }
 
     @Transactional(
@@ -56,7 +60,7 @@ public class CategoriaService {
                 "La descripción de la categoría no puede estar vacía."
         );
 
-        return categoriaRepository.insertCategoria(
+        return categoriaCommandRepository.insertCategoria(
                 nombre,
                 descripcion
         );
@@ -76,7 +80,7 @@ public class CategoriaService {
                 "La categoría con id " + idCategoria + " no existe."
         );
 
-        return categoriaRepository.updateCategoria(
+        return categoriaCommandRepository.updateCategoria(
                 idCategoria,
                 spec -> {
 

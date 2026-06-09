@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 public final class ActualizarLibroDto {
 
     private ValueHolder<String> titulo;
-    private ValueHolder<String> autor;
     private ValueHolder<Integer> anioPublicacion;
     private ValueHolder<Integer> stock;
     private ValueHolder<Double> precio;
     private ValueHolder<Integer> idCategoria;
+    private ValueHolder<String> sinopsis;
+    private ValueHolder<Integer> idEditorial;
 }

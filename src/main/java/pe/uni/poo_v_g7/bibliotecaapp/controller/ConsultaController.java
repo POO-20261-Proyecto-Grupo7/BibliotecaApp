@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 import pe.uni.poo_v_g7.bibliotecaapp.service.LibroService;
 
@@ -19,17 +18,7 @@ public class ConsultaController {
     @GetMapping("/libro/{idLibro}")
     public ResponseEntity<LibroDto> getLibro(@PathVariable(name = "idLibro") int idLibro) {
         try {
-            LibroDto dto = libroService.getLibro(idLibro);
-            return ResponseEntity.ok(dto);
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @GetMapping("/librocategoria/{idLibro}")
-    public ResponseEntity<LibroCategoriaDto> getLibroCategoria(@PathVariable(name = "idLibro") int idLibro) {
-        try {
-            LibroCategoriaDto dto = libroService.getLibroCategoria(idLibro);
+            LibroDto dto = libroService.getLibroDetailed(idLibro);
             return ResponseEntity.ok(dto);
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.notFound().build();

@@ -17,7 +17,7 @@ Características:
 */
 
 --------------------------------------------------------
--- 1. ELIMINAR BASE DE DATOS SI EXISTE
+-- ELIMINAR BASE DE DATOS SI EXISTE
 --------------------------------------------------------
 
 USE master;
@@ -41,7 +41,7 @@ END
 GO
 
 --------------------------------------------------------
--- 2. CREAR BASE DE DATOS
+-- CREAR BASE DE DATOS
 --------------------------------------------------------
 
 CREATE DATABASE BibliotecaDB;
@@ -51,7 +51,7 @@ USE BibliotecaDB;
 GO
 
 --------------------------------------------------------
--- 3. TABLA: CATEGORIA
+-- TABLA: CATEGORIA
 --------------------------------------------------------
 
 CREATE TABLE Categoria (
@@ -62,13 +62,43 @@ CREATE TABLE Categoria (
 GO
 
 --------------------------------------------------------
--- 4. TABLA: LIBRO
+-- TABLA: EDITORIAL
+--------------------------------------------------------
+
+CREATE TABLE Editorial(
+    id_editorial INT IDENTITY(1,1) PRIMARY KEY,
+    nombre VARCHAR(150) UNIQUE NOT NULL
+);
+GO
+
+--------------------------------------------------------
+-- TABLA: AUTOR
+--------------------------------------------------------
+
+CREATE TABLE Autor(
+    id_autor INT IDENTITY(1,1) PRIMARY KEY,
+    nombre VARCHAR(150) UNIQUE NOT NULL
+);
+GO
+
+--------------------------------------------------------
+-- TABLA: ETIQUETA
+--------------------------------------------------------
+
+CREATE TABLE Etiqueta(
+    id_etiqueta INT IDENTITY(1,1) PRIMARY KEY,
+    nombre VARCHAR(100) UNIQUE NOT NULL
+);
+GO
+
+--------------------------------------------------------
+-- TABLA: LIBRO
 --------------------------------------------------------
 
 CREATE TABLE Libro (
     id_libro INT IDENTITY(1,1) PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
-    autor VARCHAR(150) NOT NULL,
+    -- autor VARCHAR(150) NOT NULL,
     isbn VARCHAR(20) NOT NULL UNIQUE,
     anio_publicacion INT,
     stock INT NOT NULL DEFAULT 0,
@@ -76,9 +106,17 @@ CREATE TABLE Libro (
 
     id_categoria INT NOT NULL,
 
+    sinopsis VARCHAR(MAX),
+
+    id_editorial INT,
+
     CONSTRAINT FK_Libro_Categoria
         FOREIGN KEY (id_categoria)
         REFERENCES Categoria(id_categoria),
+
+    CONSTRAINT FK_Libro_Editorial
+        FOREIGN KEY(id_editorial)
+        REFERENCES Editorial(id_editorial),
 
     CONSTRAINT CHK_Libro_Stock
         CHECK (stock >= 0),
@@ -89,7 +127,46 @@ CREATE TABLE Libro (
 GO
 
 --------------------------------------------------------
--- 5. TABLA: CLIENTE
+-- TABLA: LIBRO_AUTOR
+--------------------------------------------------------
+
+CREATE TABLE LibroAutor(
+    id_libro INT,
+    id_autor INT,
+
+    PRIMARY KEY(id_libro,id_autor),
+
+    CONSTRAINT FK_LibroAutor_Libro
+        FOREIGN KEY(id_libro)
+        REFERENCES Libro(id_libro),
+
+    CONSTRAINT FK_LibroAutor_Autor
+        FOREIGN KEY(id_autor)
+        REFERENCES Autor(id_autor)
+);
+GO
+
+--------------------------------------------------------
+-- TABLA: LIBRO_ETIQUETA
+--------------------------------------------------------
+
+CREATE TABLE LibroEtiqueta(
+    id_libro INT,
+    id_etiqueta INT,
+
+    PRIMARY KEY(id_libro,id_etiqueta),
+    
+    CONSTRAINT FK_LibroEtiqueta_Libro
+        FOREIGN KEY(id_libro)
+        REFERENCES Libro(id_libro),
+    
+    CONSTRAINT FK_LibroEtiqueta_Etiqueta
+        FOREIGN KEY(id_etiqueta)
+        REFERENCES Etiqueta(id_etiqueta)
+);
+
+--------------------------------------------------------
+-- TABLA: CLIENTE
 --------------------------------------------------------
 
 CREATE TABLE Cliente (
@@ -105,7 +182,7 @@ CREATE TABLE Cliente (
 GO
 
 --------------------------------------------------------
--- 6. TABLA: EMPLEADO
+-- TABLA: EMPLEADO
 --------------------------------------------------------
 
 CREATE TABLE Empleado (
@@ -123,7 +200,7 @@ CREATE TABLE Empleado (
 GO
 
 --------------------------------------------------------
--- 7. TABLA: ADMINISTRADOR
+-- TABLA: ADMINISTRADOR
 --------------------------------------------------------
 
 CREATE TABLE Administrador (
@@ -142,7 +219,7 @@ CREATE TABLE Administrador (
 GO
 
 --------------------------------------------------------
--- 8. TABLA: VENTA
+-- TABLA: VENTA
 --------------------------------------------------------
 
 CREATE TABLE Venta (
@@ -169,10 +246,10 @@ CREATE TABLE Venta (
 GO
 
 --------------------------------------------------------
--- 9. TABLA: DETALLE_VENTA
+-- TABLA: DETALLE_VENTA
 --------------------------------------------------------
 
-CREATE TABLE Detalle_Venta (
+CREATE TABLE DetalleVenta (
     id_detalle INT IDENTITY(1,1) PRIMARY KEY,
 
     id_venta INT NOT NULL,
@@ -203,7 +280,7 @@ CREATE TABLE Detalle_Venta (
 GO
 
 --------------------------------------------------------
--- 10. DATOS DE PRUEBA
+-- DATOS DE PRUEBA
 --------------------------------------------------------
 
 INSERT INTO Categoria(nombre, descripcion)
@@ -213,44 +290,56 @@ VALUES
 ('Redes', 'Infraestructura y networking');
 GO
 
+INSERT INTO Editorial(nombre)
+VALUES
+('Editorial 1'),
+('Editorial 2');
+GO
+
+
 INSERT INTO Libro(
     titulo,
-    autor,
     isbn,
     anio_publicacion,
     stock,
     precio,
-    id_categoria
+    id_categoria,
+    sinopsis,
+    id_editorial
 )
 VALUES
 (
     'Clean Code',
-    'Robert C. Martin',
+    -- 'Robert C. Martin',
     '9780132350884',
     2008,
     10,
     120.50,
+    1,
+    '',
     1
 ),
 (
     'Database System Concepts',
-    'Silberschatz',
+    -- 'Silberschatz',
     '9780073523323',
     2019,
     5,
     180.00,
+    2,
+    '',
     2
 );
 GO
 
 --------------------------------------------------------
--- 11. CONSULTA DE VALIDACION
+-- CONSULTA DE VALIDACION
 --------------------------------------------------------
 
 SELECT
     l.id_libro,
     l.titulo,
-    l.autor,
+    -- l.autor,
     c.nombre AS categoria
 FROM Libro l
 INNER JOIN Categoria c

@@ -5,10 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.ErrorResponse;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarCategoriaDto;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarLibroDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.*;
 import pe.uni.poo_v_g7.bibliotecaapp.service.CategoriaService;
+import pe.uni.poo_v_g7.bibliotecaapp.service.EditorialService;
 import pe.uni.poo_v_g7.bibliotecaapp.service.LibroService;
 
 import java.time.LocalDateTime;
@@ -24,10 +23,18 @@ public class RegistrarController {
     @Autowired
     private CategoriaService categoriaService;
 
+    @Autowired
+    private EditorialService editorialService;
+
     @PostMapping("/libro")
     public ResponseEntity<?> registrarLibro(@RequestBody RegistrarLibroDto bean, HttpServletRequest request) {
         try {
-            return ResponseEntity.ok(libroService.registerLibro(bean, categoriaService::checkCategoriaExists));
+            LibroDto dto = libroService.registerLibro(bean,
+                    categoriaService::checkCategoriaExists,
+                    editorialService::checkEditorialExists
+            );
+            LibroDetailedDto detailedDto = libroService.getLibroDetailed(dto.getIdLibro());
+            return ResponseEntity.ok(detailedDto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
                     e.getMessage(), LocalDateTime.now().toString(), request.getRequestURI(), e.getStackTrace()
