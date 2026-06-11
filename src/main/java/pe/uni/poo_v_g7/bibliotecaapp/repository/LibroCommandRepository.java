@@ -14,7 +14,6 @@ public class LibroCommandRepository extends AbstractCommandRepository {
             int anioPublicacion,
             int stock,
             double precio,
-            int idCategoria,
             String sinopsis,
             Integer idEditorial
     ) {
@@ -26,7 +25,6 @@ public class LibroCommandRepository extends AbstractCommandRepository {
                     anio_publicacion,
                     stock,
                     precio,
-                    id_categoria,
                     sinopsis,
                     id_editorial
                 )
@@ -37,7 +35,6 @@ public class LibroCommandRepository extends AbstractCommandRepository {
                     INSERTED.anio_publicacion,
                     INSERTED.stock,
                     INSERTED.precio,
-                    INSERTED.id_categoria,
                     INSERTED.sinopsis,
                     INSERTED.id_editorial
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
@@ -48,7 +45,6 @@ public class LibroCommandRepository extends AbstractCommandRepository {
                 anioPublicacion,
                 stock,
                 precio,
-                idCategoria,
                 sinopsis,
                 idEditorial
         );
@@ -85,9 +81,9 @@ public class LibroCommandRepository extends AbstractCommandRepository {
             update.set("precio", state.precio.value());
         }
 
-        if (state.idCategoria.isPresent()) {
-            update.set("id_categoria", state.idCategoria.value());
-        }
+//        if (state.idCategoria.isPresent()) {
+//            update.set("id_categoria", state.idCategoria.value());
+//        }
 
         if (state.sinopsis.isNull()) {
             update.setNull("sinopsis");
@@ -113,7 +109,6 @@ public class LibroCommandRepository extends AbstractCommandRepository {
                 INSERTED.anio_publicacion,
                 INSERTED.stock,
                 INSERTED.precio,
-                INSERTED.id_categoria,
                 INSERTED.sinopsis,
                 INSERTED.id_editorial
                 """,
@@ -128,7 +123,7 @@ public class LibroCommandRepository extends AbstractCommandRepository {
         private final NullableField<Integer> anioPublicacion = new NullableField<>();
         private final NonNullField<Integer> stock = new NonNullField<>();
         private final NonNullField<Double> precio = new NonNullField<>();
-        private final NonNullField<Integer> idCategoria = new NonNullField<>();
+//        private final NonNullField<Integer> idCategoria = new NonNullField<>();
         private final NullableField<String> sinopsis = new NullableField<>();
         private final NullableField<Integer> idEditorial = new NullableField<>();
 
@@ -200,13 +195,13 @@ public class LibroCommandRepository extends AbstractCommandRepository {
 
         @Override
         public LibroUpdateState setIdCategoria(int idCategoria) {
-            this.idCategoria.set(idCategoria);
+//            this.idCategoria.set(idCategoria);
             return this;
         }
 
         @Override
         public LibroUpdateState unsetIdCategoria() {
-            this.idCategoria.unset();
+//            this.idCategoria.unset();
             return this;
         }
 

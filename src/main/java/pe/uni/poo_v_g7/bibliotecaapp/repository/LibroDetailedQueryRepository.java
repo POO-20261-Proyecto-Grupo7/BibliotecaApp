@@ -52,7 +52,12 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
     public List<LibroDetailedDto> getLibrosDetailedByCategoria(int idCategoria) {
         return findLibroDetailed(
                 """
-                WHERE l.id_categoria = ?
+                WHERE EXISTS (
+                    SELECT 1
+                    FROM LibroCategoria lc2
+                    WHERE lc2.id_libro = l.id_libro
+                      AND lc2.id_categoria = ?
+                )
                 """,
                 idCategoria
         );
@@ -108,10 +113,10 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
                     l.anio_publicacion,
                     l.stock,
                     l.precio,
-                    l.id_categoria,
                     l.sinopsis,
                     l.id_editorial,
 
+                    c.id_categoria,
                     c.nombre AS categoria_nombre,
                     c.descripcion AS categoria_descripcion,
 
@@ -123,8 +128,10 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
                     et.id_etiqueta,
                     et.nombre AS etiqueta_nombre
                 FROM Libro l
-                INNER JOIN Categoria c
-                    ON l.id_categoria = c.id_categoria
+                LEFT JOIN LibroCategoria lc
+                    ON l.id_libro = lc.id_libro
+                LEFT JOIN Categoria c
+                    ON lc.id_categoria = c.id_categoria
                 LEFT JOIN Editorial e
                     ON l.id_editorial = e.id_editorial
                 LEFT JOIN LibroAutor la
@@ -171,6 +178,20 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
                     dto.getEtiquetas().add(etiquetaDto);
                 }
             }
+
+            if (row.idCategoria() != null) {
+                CategoriaDto categoriaDto = new CategoriaDto(
+                        row.idCategoria(),
+                        row.categoriaNombre(),
+                        row.categoriaDescripcion()
+                );
+                if (dto.getCategorias() == null) {
+                    dto.setCategorias(new ArrayList<>());
+                }
+                if (!dto.getCategorias().contains(categoriaDto)) {
+                    dto.getCategorias().add(categoriaDto);
+                }
+            }
         }
 
         return new ArrayList<>(result.values());
@@ -185,35 +206,28 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
         dto.setAnioPublicacion(row.anioPublicacion());
         dto.setStock(row.stock());
         dto.setPrecio(row.precio());
-        dto.setIdCategoria(row.idCategoria());
         dto.setSinopsis(row.sinopsis());
         dto.setIdEditorial(row.idEditorial());
 
-        dto.setCategoriaInfo(
-                new CategoriaInfoDto(
-                        row.categoriaNombre(),
-                        row.categoriaDescripcion()
-                )
-        );
-
         if (row.editorialNombre() != null) {
-            dto.setEditorialInfo(
-                    new EditorialInfoDto(
+            dto.setEditorial(
+                    new EditorialDto(
+                            row.idEditorial(),
                             row.editorialNombre()
                     )
             );
         } else {
-            dto.setEditorialInfo(null);
+            dto.setEditorial(null);
         }
 
         dto.setAutores(new ArrayList<>());
         dto.setEtiquetas(new ArrayList<>());
+        dto.setCategorias(new ArrayList<>());
 
         return dto;
     }
 
     private LibroDetailedRow mapRow(ResultSet rs, int rowNum) throws SQLException {
-        BigDecimal precio = rs.getBigDecimal("precio");
 
         return new LibroDetailedRow(
                 rs.getInt("id_libro"),
@@ -221,11 +235,11 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
                 rs.getString("isbn"),
                 rs.getObject("anio_publicacion", Integer.class),
                 rs.getInt("stock"),
-                precio == null ? null : precio.doubleValue(),
-                rs.getInt("id_categoria"),
+                rs.getBigDecimal("precio"),
                 rs.getString("sinopsis"),
                 rs.getObject("id_editorial", Integer.class),
 
+                rs.getObject("id_categoria", Integer.class),
                 rs.getString("categoria_nombre"),
                 rs.getString("categoria_descripcion"),
 
@@ -245,17 +259,20 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
             String isbn,
             Integer anioPublicacion,
             int stock,
-            Double precio,
-            int idCategoria,
+            BigDecimal precio,
             String sinopsis,
             Integer idEditorial,
+
+            Integer idCategoria,
             String categoriaNombre,
             String categoriaDescripcion,
+
             String editorialNombre,
+
             Integer idAutor,
             String autorNombre,
+
             Integer idEtiqueta,
             String etiquetaNombre
-    ) {
-    }
+    ) {}
 }

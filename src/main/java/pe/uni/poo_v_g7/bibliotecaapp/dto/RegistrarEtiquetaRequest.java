@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public final class ActualizarCategoriaDto {
+public final class RegistrarEtiquetaRequest {
 
-    private ValueHolder<String> nombre;
-    private ValueHolder<String> descripcion;
+    private String nombre;
 }

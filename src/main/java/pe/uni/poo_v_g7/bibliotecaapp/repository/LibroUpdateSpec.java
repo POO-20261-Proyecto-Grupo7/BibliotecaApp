@@ -18,7 +18,9 @@ public interface LibroUpdateSpec {
     LibroUpdateSpec setPrecio(double precio);
     LibroUpdateSpec unsetPrecio();
 
+    @Deprecated
     LibroUpdateSpec setIdCategoria(int idCategoria);
+    @Deprecated
     LibroUpdateSpec unsetIdCategoria();
 
     LibroUpdateSpec setSinopsis(String sinopsis);

@@ -27,28 +27,24 @@ public class RegistrarController {
     private EditorialService editorialService;
 
     @PostMapping("/libro")
-    public ResponseEntity<?> registrarLibro(@RequestBody RegistrarLibroDto bean, HttpServletRequest request) {
+    public ResponseEntity<?> registrarLibro(@RequestBody RegistrarLibroRequest request, HttpServletRequest httpRequest) {
         try {
-            LibroDto dto = libroService.registerLibro(bean,
-                    categoriaService::checkCategoriaExists,
-                    editorialService::checkEditorialExists
-            );
-            LibroDetailedDto detailedDto = libroService.getLibroDetailed(dto.getIdLibro());
-            return ResponseEntity.ok(detailedDto);
+            LibroDetailedDto dto = libroService.registerLibro(request);
+            return ResponseEntity.ok(dto);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
-                    e.getMessage(), LocalDateTime.now().toString(), request.getRequestURI(), e.getStackTrace()
+                    e.getMessage(), LocalDateTime.now().toString(), httpRequest.getRequestURI(), e.getStackTrace()
             ));
         }
     }
 
     @PostMapping("/categoria")
-    public ResponseEntity<?> registrarCategoria(@RequestBody RegistrarCategoriaDto bean, HttpServletRequest request) {
+    public ResponseEntity<?> registrarCategoria(@RequestBody RegistrarCategoriaRequest request, HttpServletRequest httpRequest) {
         try {
-            return ResponseEntity.ok(categoriaService.registerCategoria(bean));
+            return ResponseEntity.ok(categoriaService.registerCategoria(request));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse(
-                    e.getMessage(), LocalDateTime.now().toString(), request.getRequestURI(), e.getStackTrace()
+                    e.getMessage(), LocalDateTime.now().toString(), httpRequest.getRequestURI(), e.getStackTrace()
             ));
         }
     }

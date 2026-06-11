@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarEtiquetaDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarEtiquetaRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.EtiquetaDto;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarEtiquetaDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarEtiquetaRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.EtiquetaCommandRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.EtiquetaQueryRepository;
 
@@ -40,7 +40,7 @@ public class EtiquetaService {
             propagation = Propagation.REQUIRED,
             rollbackFor = Exception.class
     )
-    public EtiquetaDto registerEtiqueta(RegistrarEtiquetaDto request) {
+    public EtiquetaDto registerEtiqueta(RegistrarEtiquetaRequest request) {
 
         String nombre = requireNotBlank(
                 requireNonNull(
@@ -65,7 +65,7 @@ public class EtiquetaService {
     )
     public EtiquetaDto updateEtiqueta(
             int idEtiqueta,
-            ActualizarEtiquetaDto request
+            ActualizarEtiquetaRequest request
     ) {
 
         requireTrue(
@@ -77,11 +77,11 @@ public class EtiquetaService {
                 idEtiqueta,
                 spec -> {
 
-                    if (request.getNombre() != null) {
+                    if (request.isNombrePresent()) {
 
                         String nombre = requireNotBlank(
                                 requireNonNull(
-                                        request.getNombre().getValue(),
+                                        request.getNombre(),
                                         "El nombre de la etiqueta no puede ser nulo."
                                 ),
                                 "El nombre de la etiqueta no puede estar vacío."

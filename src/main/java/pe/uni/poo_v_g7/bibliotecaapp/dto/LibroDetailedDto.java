@@ -1,21 +1,17 @@
 package pe.uni.poo_v_g7.bibliotecaapp.dto;
 
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public final class LibroDetailedDto extends LibroDto {
-
-    @NonNull
-    private CategoriaInfoDto categoriaInfo;
-
-    private EditorialInfoDto editorialInfo;
-
+    private EditorialDto editorial;
     private List<AutorDto> autores;
-
+    private List<CategoriaDto> categorias;
     private List<EtiquetaDto> etiquetas;
 }

@@ -10,4 +10,9 @@ public final class EditorialDto extends EditorialInfoDto {
 
     @NonNull
     private Integer idEditorial;
+
+    public EditorialDto(@NonNull Integer idEditorial, @NonNull String nombre) {
+        super(nombre);
+        this.idEditorial = idEditorial;
+    }
 }

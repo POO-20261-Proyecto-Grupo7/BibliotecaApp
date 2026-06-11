@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroCategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 
 import java.util.ArrayList;
@@ -54,25 +53,25 @@ public class LibroRepository {
         );
     }
 
-    public LibroCategoriaDto getLibroCategoria(int idLibro) {
-        String sql = """
-                SELECT
-                    l.id_libro,
-                    l.titulo,
-                    l.autor,
-                    c.nombre AS categoria
-                FROM Libro l
-                INNER JOIN Categoria c
-                    ON l.id_categoria = c.id_categoria
-                WHERE l.id_libro = ?;
-                """;
-
-        return jdbcTemplate.queryForObject(
-                sql,
-                BeanPropertyRowMapper.newInstance(LibroCategoriaDto.class),
-                idLibro
-        );
-    }
+//    public LibroCategoriaDto getLibroCategoria(int idLibro) {
+//        String sql = """
+//                SELECT
+//                    l.id_libro,
+//                    l.titulo,
+//                    l.autor,
+//                    c.nombre AS categoria
+//                FROM Libro l
+//                INNER JOIN Categoria c
+//                    ON l.id_categoria = c.id_categoria
+//                WHERE l.id_libro = ?;
+//                """;
+//
+//        return jdbcTemplate.queryForObject(
+//                sql,
+//                BeanPropertyRowMapper.newInstance(LibroCategoriaDto.class),
+//                idLibro
+//        );
+//    }
 
     public LibroDto insertLibro(
             String titulo,

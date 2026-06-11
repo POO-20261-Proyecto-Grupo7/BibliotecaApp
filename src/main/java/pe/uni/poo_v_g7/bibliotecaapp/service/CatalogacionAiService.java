@@ -1,10 +1,12 @@
-package pe.uni.poo_v_g7.bibliotecaapp.service.ai;
+package pe.uni.poo_v_g7.bibliotecaapp.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.ai.CatalogacionAiRequest;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.ai.CatalogacionAiResponse;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.CatalogacionAiRequest;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.CatalogacionAiResponse;
 
 import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 
@@ -12,11 +14,10 @@ import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 public class CatalogacionAiService {
 
     private final ChatClient chatClient;
-    private final ObjectMapper objectMapper;
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    public CatalogacionAiService(ChatClient.Builder chatClientBuilder, ObjectMapper objectMapper) {
+    public CatalogacionAiService(ChatClient.Builder chatClientBuilder) {
         this.chatClient = chatClientBuilder.build();
-        this.objectMapper = objectMapper;
     }
 
     public CatalogacionAiResponse catalogar(CatalogacionAiRequest request) {
@@ -40,9 +41,9 @@ public class CatalogacionAiService {
         String descripcion = requireNotBlank(
                 requireNonNull(
                         request.descripcion(),
-                        "La descripción no puede ser nula."
+                        "La descripción/sinopsis no puede ser nula."
                 ),
-                "La descripción no puede estar vacía."
+                "La descripción/sinopsis no puede estar vacía."
         );
         String prompt = """
                 Eres un bibliotecario experto en catalogación.
@@ -53,8 +54,8 @@ public class CatalogacionAiService {
                   "isbn": "string",
                   "titulo": "string",
                   "sinopsis": "string",
-                  "categorias": ["string"],
-                  "etiquetas": ["string"]
+                  "categorias": [{"nombre": "string", "descripcion": "string"}],
+                  "etiquetas": [{"nombre": "string"}]
                 }
 
                 Reglas:

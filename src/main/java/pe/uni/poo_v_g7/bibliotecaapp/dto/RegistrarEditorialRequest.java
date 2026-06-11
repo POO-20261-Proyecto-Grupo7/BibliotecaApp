@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public final class ActualizarAutorDto {
+public final class RegistrarEditorialRequest {
 
-    private ValueHolder<String> nombre;
+    private String nombre;
 }

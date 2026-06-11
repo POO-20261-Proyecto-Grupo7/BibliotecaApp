@@ -104,15 +104,15 @@ CREATE TABLE Libro (
     stock INT NOT NULL DEFAULT 0,
     precio DECIMAL(10,2) NOT NULL,
 
-    id_categoria INT NOT NULL,
+    -- id_categoria INT NOT NULL,
 
     sinopsis VARCHAR(MAX),
 
     id_editorial INT,
 
-    CONSTRAINT FK_Libro_Categoria
-        FOREIGN KEY (id_categoria)
-        REFERENCES Categoria(id_categoria),
+    --CONSTRAINT FK_Libro_Categoria
+    --    FOREIGN KEY (id_categoria)
+    --    REFERENCES Categoria(id_categoria),
 
     CONSTRAINT FK_Libro_Editorial
         FOREIGN KEY(id_editorial)
@@ -163,6 +163,25 @@ CREATE TABLE LibroEtiqueta(
     CONSTRAINT FK_LibroEtiqueta_Etiqueta
         FOREIGN KEY(id_etiqueta)
         REFERENCES Etiqueta(id_etiqueta)
+);
+
+--------------------------------------------------------
+-- TABLA: LIBRO_CATEGORIA
+--------------------------------------------------------
+
+CREATE TABLE LibroCategoria(
+    id_libro INT,
+    id_categoria INT,
+
+    PRIMARY KEY(id_libro,id_categoria),
+    
+    CONSTRAINT FK_LibroCategoria_Libro
+        FOREIGN KEY(id_libro)
+        REFERENCES Libro(id_libro),
+    
+    CONSTRAINT FK_LibroCategoria_Categoria
+        FOREIGN KEY(id_categoria)
+        REFERENCES Categoria(id_categoria)
 );
 
 --------------------------------------------------------
@@ -303,7 +322,6 @@ INSERT INTO Libro(
     anio_publicacion,
     stock,
     precio,
-    id_categoria,
     sinopsis,
     id_editorial
 )
@@ -315,7 +333,6 @@ VALUES
     2008,
     10,
     120.50,
-    1,
     '',
     1
 ),
@@ -326,7 +343,6 @@ VALUES
     2019,
     5,
     180.00,
-    2,
     '',
     2
 );
@@ -338,10 +354,6 @@ GO
 
 SELECT
     l.id_libro,
-    l.titulo,
-    -- l.autor,
-    c.nombre AS categoria
-FROM Libro l
-INNER JOIN Categoria c
-    ON l.id_categoria = c.id_categoria;
+    l.titulo
+FROM Libro l;
 GO

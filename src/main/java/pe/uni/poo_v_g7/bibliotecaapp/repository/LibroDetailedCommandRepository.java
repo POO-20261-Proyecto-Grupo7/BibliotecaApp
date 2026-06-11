@@ -23,11 +23,11 @@ public class LibroDetailedCommandRepository extends AbstractCommandRepository {
             int anioPublicacion,
             int stock,
             double precio,
-            int idCategoria,
             String sinopsis,
             Integer idEditorial,
             List<Integer> idsAutores,
-            List<Integer> idsEtiquetas
+            List<Integer> idsEtiquetas,
+            List<Integer> idsCategorias
     ) {
 
         LibroDto libro = libroCommandRepository.insertLibro(
@@ -36,7 +36,6 @@ public class LibroDetailedCommandRepository extends AbstractCommandRepository {
                 anioPublicacion,
                 stock,
                 precio,
-                idCategoria,
                 sinopsis,
                 idEditorial
         );

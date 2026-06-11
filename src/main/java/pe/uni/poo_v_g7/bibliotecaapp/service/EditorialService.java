@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarEditorialDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarEditorialRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.EditorialDto;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarEditorialDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarEditorialRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.EditorialCommandRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.EditorialQueryRepository;
 
@@ -40,7 +40,7 @@ public class EditorialService {
             propagation = Propagation.REQUIRED,
             rollbackFor = Exception.class
     )
-    public EditorialDto registerEditorial(RegistrarEditorialDto request) {
+    public EditorialDto registerEditorial(RegistrarEditorialRequest request) {
 
         String nombre = requireNotBlank(
                 requireNonNull(
@@ -65,7 +65,7 @@ public class EditorialService {
     )
     public EditorialDto updateEditorial(
             int idEditorial,
-            ActualizarEditorialDto request
+            ActualizarEditorialRequest request
     ) {
 
         requireTrue(
@@ -77,11 +77,11 @@ public class EditorialService {
                 idEditorial,
                 spec -> {
 
-                    if (request.getNombre() != null) {
+                    if (request.isNombrePresent()) {
 
                         String nombre = requireNotBlank(
                                 requireNonNull(
-                                        request.getNombre().getValue(),
+                                        request.getNombre(),
                                         "El nombre de la editorial no puede ser nulo."
                                 ),
                                 "El nombre de la editorial no puede estar vacío."

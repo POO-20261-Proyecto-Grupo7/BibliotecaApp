@@ -6,27 +6,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.ErrorResponse;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.CatalogacionAiRequest;
-import pe.uni.poo_v_g7.bibliotecaapp.service.CatalogacionAiService;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarLibroRequest;
+import pe.uni.poo_v_g7.bibliotecaapp.service.CatalogacionAutomaticaService;
 
 import java.time.LocalDateTime;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("/bbapp/api/v1/ai/catalogacion")
-public class CatalogacionAiController {
+@RequestMapping("/bbapp/api/v1/catalogacion-automatica")
+public class CatalogacionAutomaticaController {
 
-    private final CatalogacionAiService catalogacionAiService;
+    private final CatalogacionAutomaticaService service;
 
-    public CatalogacionAiController(CatalogacionAiService catalogacionAiService) {
-        this.catalogacionAiService = catalogacionAiService;
+    public CatalogacionAutomaticaController(
+            CatalogacionAutomaticaService service
+    ) {
+        this.service = service;
     }
 
     @PostMapping("/catalogar-libro")
-    public ResponseEntity<?> catalogar(@Valid @RequestBody CatalogacionAiRequest request,
-                                            HttpServletRequest httpServletRequest) {
+    public ResponseEntity<?> registrarAndCatalogarAutomaticamente(@Valid @RequestBody RegistrarLibroRequest request,
+                                                                  HttpServletRequest httpServletRequest) {
         try {
-            return ResponseEntity.ok(catalogacionAiService.catalogar(request));
+            return ResponseEntity.ok(service.catalogarNuevoLibro(request));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     new ErrorResponse(

@@ -4,16 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarAutorDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.ActualizarAutorRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.AutorDto;
-import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarAutorDto;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarAutorRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.AutorCommandRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.AutorQueryRepository;
 
 import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 
+@Deprecated
 @Service
-public class AutorService {
+public class AutorServiceDep {
 
     @Autowired
     private AutorQueryRepository autorQueryRepository;
@@ -40,7 +41,7 @@ public class AutorService {
             propagation = Propagation.REQUIRED,
             rollbackFor = Exception.class
     )
-    public AutorDto registerAutor(RegistrarAutorDto request) {
+    public AutorDto registerAutor(RegistrarAutorRequest request) {
 
         String nombre = requireNotBlank(
                 requireNonNull(
@@ -65,7 +66,7 @@ public class AutorService {
     )
     public AutorDto updateAutor(
             int idAutor,
-            ActualizarAutorDto request
+            ActualizarAutorRequest request
     ) {
 
         requireTrue(
@@ -77,11 +78,11 @@ public class AutorService {
                 idAutor,
                 spec -> {
 
-                    if (request.getNombre() != null) {
+                    if (request.isNombrePresent()) {
 
                         String nombre = requireNotBlank(
                                 requireNonNull(
-                                        request.getNombre().getValue(),
+                                        request.getNombre(),
                                         "El nombre del autor no puede ser nulo."
                                 ),
                                 "El nombre del autor no puede estar vacío."

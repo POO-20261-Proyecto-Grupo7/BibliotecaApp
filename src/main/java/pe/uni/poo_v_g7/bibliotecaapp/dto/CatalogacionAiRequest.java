@@ -1,4 +1,4 @@
-package pe.uni.poo_v_g7.bibliotecaapp.dto.ai;
+package pe.uni.poo_v_g7.bibliotecaapp.dto;
 
 public record CatalogacionAiRequest(
         String isbn,

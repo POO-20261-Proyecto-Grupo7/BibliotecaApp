@@ -5,9 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public final class ValueHolder<T> {
+@NoArgsConstructor
+public final class RegistrarCategoriaRequest {
 
-    private T value;
+    private String nombre;
+    private String descripcion;
 }

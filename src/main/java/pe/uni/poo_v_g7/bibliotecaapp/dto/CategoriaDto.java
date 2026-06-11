@@ -10,4 +10,9 @@ public final class CategoriaDto extends CategoriaInfoDto {
 
     @NonNull
     private Integer idCategoria;
+
+    public CategoriaDto(@NonNull Integer idCategoria, @NonNull String nombre, String descripcion) {
+        super(nombre, descripcion);
+        this.idCategoria = idCategoria;
+    }
 }

@@ -810,7 +810,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"nombre\": {\r\n        \"value\": \"Programación Avanzada\"\r\n    },\r\n\r\n    // \"descripcion\": {\r\n    //     \"value\": \"Libros profesionales de desarrollo de software\"\r\n    // }\r\n\r\n    // \"descripcion\": {\r\n    //     // ESTABLECE EN NULO\r\n    // }\r\n\r\n    // Ctrl + K + C : COMENTAR SELECCION\r\n    // Ctrl + K + U : DESCOMENTAR SELECCION\r\n\r\n    \"descripcion\": {\r\n        \"value\": \"Libros de desarrollo de software\"\r\n    }\r\n}",
+              "raw": "{\r\n    \"nombre\": \"Programacion Avanzada 2\",\r\n\r\n    // \"descripcion\": {\r\n    //     \"value\": \"Libros profesionales de desarrollo de software\"\r\n    // }\r\n\r\n    // \"descripcion\": {\r\n    //     // ESTABLECE EN NULO\r\n    // }\r\n\r\n    // Ctrl + K + C : COMENTAR SELECCION\r\n    // Ctrl + K + U : DESCOMENTAR SELECCION\r\n\r\n    \"descripcion\": \"Libros de desarrollo de software\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -868,6 +868,43 @@
                 "v1",
                 "ai",
                 "catalogacion",
+                "catalogar-libro"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "CatalogacionAutomatica",
+      "item": [
+        {
+          "name": "CatalogarNuevoLibro",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"titulo\": \"El Quijote\",\r\n    \"autor\": \"Miguel\",\r\n    \"isbn\": \"9780073523327\",\r\n    \"anioPublicacion\": 1605,\r\n    \"stockInicial\": 10,\r\n    \"precio\": \"100.0\",\r\n    \"idCategoria\": 1,\r\n    \"sinopsis\": \"Don Quijote de la Mancha, escrita por Miguel de Cervantes, narra las aventuras de un hidalgo manchego que enloquece por leer demasiadas novelas de caballería. Autoproclamado caballero andante, viaja por España junto a su fiel escudero, Sancho Panza, para defender a los desvalidos y luchar por el honor de su amada, Dulcinea del Toboso.\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/catalogacion-automatica/catalogar-libro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "catalogacion-automatica",
                 "catalogar-libro"
               ]
             }
