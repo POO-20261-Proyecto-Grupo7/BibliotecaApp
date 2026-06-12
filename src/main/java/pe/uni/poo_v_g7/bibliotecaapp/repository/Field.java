@@ -2,6 +2,7 @@ package pe.uni.poo_v_g7.bibliotecaapp.repository;
 
 import lombok.Getter;
 
+@Deprecated
 class Field<T> {
 
     @Getter

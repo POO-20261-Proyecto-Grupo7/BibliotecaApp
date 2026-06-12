@@ -1,5 +1,6 @@
 package pe.uni.poo_v_g7.bibliotecaapp.repository;
 
+@Deprecated
 final class NullableField<T> extends Field<T> {
 
     private boolean nullValue;

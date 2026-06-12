@@ -17,24 +17,24 @@ public class CatalogacionAutomaticaService {
 
     private final CatalogacionAiService catalogacionAiService;
 
-    private final LibroJpaRepository libroRepository;
+    private final LibroRepository libroRepository;
 
     private final LibroMapper libroMapper;
 
     private final LibroService libroService;
 
-    private final CategoriaJpaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    private final EtiquetaJpaRepository etiquetaRepository;
+    private final EtiquetaRepository etiquetaRepository;
 
     public CatalogacionAutomaticaService(
             ChatClient.Builder chatClientBuilder,
-            LibroJpaRepository libroRepository,
+            LibroRepository libroRepository,
             LibroMapper libroMapper,
-            EditorialJpaRepository editorialRepository,
-            AutorJpaRepository autorRepository,
-            CategoriaJpaRepository categoriaRepository,
-            EtiquetaJpaRepository etiquetaRepository
+            EditorialRepository editorialRepository,
+            AutorRepository autorRepository,
+            CategoriaRepository categoriaRepository,
+            EtiquetaRepository etiquetaRepository
     ) {
         this.catalogacionAiService = new CatalogacionAiService(chatClientBuilder);
         this.libroRepository = libroRepository;
@@ -49,7 +49,7 @@ public class CatalogacionAutomaticaService {
             rollbackFor = Exception.class
     )
     public LibroDetailedDto catalogarNuevoLibro(RegistrarLibroRequest request) {
-        var libro = libroService.registerLibroAndGetEntity(request);
+        var libro = libroService.registerLibroEntity(request);
         var ai = catalogacionAiService.catalogar(new CatalogacionAiRequest(libro.getIsbn(), libro.getTitulo(), libro.getSinopsis()));
 
         if (ai.categorias() != null) {

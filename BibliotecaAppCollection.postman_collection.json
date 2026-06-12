@@ -912,6 +912,43 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Prestamo",
+      "item": [
+        {
+          "name": "PrestarEjemplar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"idCliente\": 1,\r\n    \"ejemplares\" : [\"CC-0002\"]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/prestamo/prestar-ejemplar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "prestamo",
+                "prestar-ejemplar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

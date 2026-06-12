@@ -10,6 +10,5 @@ import lombok.NonNull;
 @NoArgsConstructor
 public sealed class EditorialInfoDto permits EditorialDto {
 
-    @NonNull
     private String nombre;
 }

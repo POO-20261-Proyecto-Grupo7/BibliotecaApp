@@ -3,6 +3,7 @@ package pe.uni.poo_v_g7.bibliotecaapp.repository;
 import java.util.ArrayList;
 import java.util.List;
 
+@Deprecated
 public abstract class AbstractCommandRepository extends AbstractQueryRepository {
 
     protected final <T> T insertOne(

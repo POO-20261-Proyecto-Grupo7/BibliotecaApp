@@ -5,6 +5,7 @@ import pe.uni.poo_v_g7.bibliotecaapp.dto.CategoriaDto;
 
 import java.util.function.Consumer;
 
+@Deprecated
 @Repository
 public class CategoriaCommandRepository extends AbstractCommandRepository {
 

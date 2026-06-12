@@ -9,6 +9,14 @@ import java.util.stream.Collectors;
 @Component
 public class LibroMapper {
 
+    private final EditorialMapper editorialMapper;
+
+    public LibroMapper(
+            EditorialMapper editorialMapper
+    ) {
+        this.editorialMapper = editorialMapper;
+    }
+
     public LibroDetailedDto toDetailedDto(Libro libro) {
         LibroDetailedDto dto = new LibroDetailedDto();
         dto.setIdLibro(libro.getIdLibro());
@@ -18,7 +26,6 @@ public class LibroMapper {
         dto.setStock(libro.getStock());
         dto.setPrecio(libro.getPrecio());
         dto.setSinopsis(libro.getSinopsis());
-        dto.setIdEditorial(libro.getEditorial() != null ? libro.getEditorial().getIdEditorial() : null);
 
         if (libro.getEditorial() != null) {
             dto.setEditorial(new EditorialDto(
@@ -51,7 +58,7 @@ public class LibroMapper {
                 libro.getStock(),
                 libro.getPrecio(),
                 libro.getSinopsis(),
-                libro.getEditorial() != null ? libro.getEditorial().getIdEditorial() : null
+                libro.getEditorial() != null ? editorialMapper.toDto(libro.getEditorial()) : null
         );
     }
 }

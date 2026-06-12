@@ -8,6 +8,7 @@ import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Deprecated
 @Repository
 public class LibroDetailedCommandRepository extends AbstractCommandRepository {
 

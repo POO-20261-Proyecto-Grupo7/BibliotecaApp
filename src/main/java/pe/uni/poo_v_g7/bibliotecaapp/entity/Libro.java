@@ -2,16 +2,18 @@ package pe.uni.poo_v_g7.bibliotecaapp.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
 @Entity
 @Table(name = "Libro")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Libro {
 
     @Id
@@ -34,6 +36,7 @@ public class Libro {
     @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal precio;
 
+    @Lob
     @Column(columnDefinition = "VARCHAR(MAX)")
     private String sinopsis;
 
@@ -64,4 +67,7 @@ public class Libro {
             inverseJoinColumns = @JoinColumn(name = "id_etiqueta")
     )
     private Set<Etiqueta> etiquetas = new HashSet<>();
+
+    @OneToMany(mappedBy = "libro")
+    private Set<Ejemplar> ejemplares = new HashSet<>();
 }

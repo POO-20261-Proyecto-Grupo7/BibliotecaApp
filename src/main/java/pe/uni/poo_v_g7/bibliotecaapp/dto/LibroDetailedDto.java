@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 public final class LibroDetailedDto extends LibroDto {
-    private EditorialDto editorial;
     private List<AutorDto> autores;
     private List<CategoriaDto> categorias;
     private List<EtiquetaDto> etiquetas;

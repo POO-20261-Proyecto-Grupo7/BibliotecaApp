@@ -5,7 +5,7 @@ import pe.uni.poo_v_g7.bibliotecaapp.entity.Etiqueta;
 
 import java.util.Optional;
 
-public interface EtiquetaJpaRepository extends JpaRepository<Etiqueta, Integer> {
+public interface EtiquetaRepository extends JpaRepository<Etiqueta, Integer> {
 
     Optional<Etiqueta> findByNombre(String nombre);
 }

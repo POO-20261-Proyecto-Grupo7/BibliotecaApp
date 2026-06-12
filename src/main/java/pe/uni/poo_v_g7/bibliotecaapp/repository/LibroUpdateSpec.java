@@ -1,5 +1,6 @@
 package pe.uni.poo_v_g7.bibliotecaapp.repository;
 
+@Deprecated
 public interface LibroUpdateSpec {
 
     LibroUpdateSpec setTitulo(String titulo);

@@ -12,17 +12,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public sealed class LibroDto permits LibroDetailedDto {
 
-    @NonNull
     private Integer idLibro;
-    @NonNull
     private String titulo;
-    @NonNull
     private String isbn;
     private Integer anioPublicacion;
-    @NonNull
     private Integer stock;
-    @NonNull
     private BigDecimal precio;
     private String sinopsis;
-    private Integer idEditorial;
+    private EditorialDto editorial;
 }

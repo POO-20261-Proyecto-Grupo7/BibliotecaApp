@@ -3,8 +3,6 @@ package pe.uni.poo_v_g7.bibliotecaapp.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.CatalogacionAiRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.CatalogacionAiResponse;
 

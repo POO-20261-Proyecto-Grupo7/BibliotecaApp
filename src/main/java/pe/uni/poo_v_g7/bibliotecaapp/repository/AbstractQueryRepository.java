@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.util.List;
 
+@Deprecated
 public abstract class AbstractQueryRepository {
 
     @Autowired

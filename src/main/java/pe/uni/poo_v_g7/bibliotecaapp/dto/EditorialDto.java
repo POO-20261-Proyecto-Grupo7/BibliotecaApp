@@ -8,10 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 public final class EditorialDto extends EditorialInfoDto {
 
-    @NonNull
     private Integer idEditorial;
 
-    public EditorialDto(@NonNull Integer idEditorial, @NonNull String nombre) {
+    public EditorialDto(Integer idEditorial, String nombre) {
         super(nombre);
         this.idEditorial = idEditorial;
     }

@@ -130,7 +130,7 @@ GO
 -- TABLA: LIBRO_AUTOR
 --------------------------------------------------------
 
-CREATE TABLE LibroAutor(
+CREATE TABLE Libro_Autor(
     id_libro INT,
     id_autor INT,
 
@@ -150,7 +150,7 @@ GO
 -- TABLA: LIBRO_ETIQUETA
 --------------------------------------------------------
 
-CREATE TABLE LibroEtiqueta(
+CREATE TABLE Libro_Etiqueta(
     id_libro INT,
     id_etiqueta INT,
 
@@ -169,7 +169,7 @@ CREATE TABLE LibroEtiqueta(
 -- TABLA: LIBRO_CATEGORIA
 --------------------------------------------------------
 
-CREATE TABLE LibroCategoria(
+CREATE TABLE Libro_Categoria(
     id_libro INT,
     id_categoria INT,
 
@@ -184,19 +184,82 @@ CREATE TABLE LibroCategoria(
         REFERENCES Categoria(id_categoria)
 );
 
+CREATE TABLE Ejemplar(
+    id_ejemplar INT IDENTITY PRIMARY KEY,
+
+    id_libro INT NOT NULL,
+
+    codigo VARCHAR(50) UNIQUE NOT NULL,
+
+    estado VARCHAR(20) NOT NULL DEFAULT 'DISPONIBLE',
+
+    CONSTRAINT FK_Ejemplar_Libro
+        FOREIGN KEY(id_libro)
+        REFERENCES Libro(id_libro),
+
+    CONSTRAINT CHK_Ejemplar_Estado
+        CHECK (
+            estado IN (
+                'DISPONIBLE',
+                'PRESTADO',
+                'PERDIDO',
+                'DANIADO'
+            )
+        )
+);
+
 --------------------------------------------------------
 -- TABLA: CLIENTE
 --------------------------------------------------------
 
 CREATE TABLE Cliente (
     id_cliente INT IDENTITY(1,1) PRIMARY KEY,
+    
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
+
     dni VARCHAR(15) NOT NULL UNIQUE,
     telefono VARCHAR(20),
     correo VARCHAR(150) UNIQUE,
     direccion VARCHAR(255),
-    fecha_registro DATETIME DEFAULT GETDATE()
+    fecha_registro DATETIME DEFAULT GETDATE(),
+
+    habilitado BIT NOT NULL DEFAULT 1
+);
+GO
+
+CREATE TABLE Prestamo(
+    id_prestamo INT IDENTITY PRIMARY KEY,
+
+    id_cliente INT NOT NULL,
+
+    fecha_prestamo DATETIME NOT NULL DEFAULT GETDATE(),
+
+    fecha_limite DATETIME NOT NULL,
+
+    fecha_devolucion DATETIME NULL,
+
+    estado VARCHAR(20) NOT NULL,
+
+    CONSTRAINT FK_Prestamo_Cliente
+        FOREIGN KEY(id_cliente)
+        REFERENCES Cliente(id_cliente)
+);
+GO
+
+CREATE TABLE Prestamo_Ejemplar(
+    id_prestamo INT NOT NULL,
+    id_ejemplar INT NOT NULL,
+
+    PRIMARY KEY(id_prestamo,id_ejemplar),
+
+    CONSTRAINT FK_PE_Prestamo
+        FOREIGN KEY(id_prestamo)
+        REFERENCES Prestamo(id_prestamo),
+
+    CONSTRAINT FK_PE_Ejemplar
+        FOREIGN KEY(id_ejemplar)
+        REFERENCES Ejemplar(id_ejemplar)
 );
 GO
 
@@ -316,7 +379,7 @@ VALUES
 GO
 
 
-INSERT INTO Libro(
+INSERT INTO libro(
     titulo,
     isbn,
     anio_publicacion,
@@ -345,6 +408,70 @@ VALUES
     180.00,
     '',
     2
+);
+GO
+
+INSERT INTO Ejemplar (
+    id_libro,
+    codigo,
+    estado
+)
+VALUES
+-- Clean Code
+(1, 'CC-0001', 'DISPONIBLE'),
+(1, 'CC-0002', 'DISPONIBLE'),
+(1, 'CC-0003', 'DISPONIBLE'),
+(1, 'CC-0004', 'DISPONIBLE'),
+(1, 'CC-0005', 'PRESTADO'),
+
+-- Database System Concepts
+(2, 'DBSC-0001', 'DISPONIBLE'),
+(2, 'DBSC-0002', 'DISPONIBLE'),
+(2, 'DBSC-0003', 'PRESTADO'),
+(2, 'DBSC-0004', 'DISPONIBLE'),
+(2, 'DBSC-0005', 'DISPONIBLE');
+GO
+
+--------------------------------------------------------
+-- DATOS DE PRUEBA: CLIENTES
+--------------------------------------------------------
+
+INSERT INTO Cliente (
+    nombres,
+    apellidos,
+    dni,
+    telefono,
+    correo,
+    direccion,
+    habilitado
+)
+VALUES
+(
+    'Juan Carlos',
+    'Perez Gomez',
+    '12345678',
+    '999111222',
+    'juan.perez@correo.com',
+    'Av. Lima 123',
+    1
+),
+(
+    'Maria Elena',
+    'Lopez Torres',
+    '87654321',
+    '999333444',
+    'maria.lopez@correo.com',
+    'Jr. Arequipa 456',
+    1
+),
+(
+    'Pedro',
+    'Ramirez Diaz',
+    '11223344',
+    '999555666',
+    'pedro.ramirez@correo.com',
+    'Av. Universitaria 789',
+    0
 );
 GO
 

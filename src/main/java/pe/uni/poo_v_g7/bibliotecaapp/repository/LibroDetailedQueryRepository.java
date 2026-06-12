@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 @Repository
 public class LibroDetailedQueryRepository extends AbstractQueryRepository {
 
@@ -207,7 +208,6 @@ public class LibroDetailedQueryRepository extends AbstractQueryRepository {
         dto.setStock(row.stock());
         dto.setPrecio(row.precio());
         dto.setSinopsis(row.sinopsis());
-        dto.setIdEditorial(row.idEditorial());
 
         if (row.editorialNombre() != null) {
             dto.setEditorial(

@@ -1,6 +1,5 @@
 package pe.uni.poo_v_g7.bibliotecaapp.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,19 +8,19 @@ import pe.uni.poo_v_g7.bibliotecaapp.dto.CategoriaDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarCategoriaRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.entity.Categoria;
 import pe.uni.poo_v_g7.bibliotecaapp.mapper.CategoriaMapper;
-import pe.uni.poo_v_g7.bibliotecaapp.repository.CategoriaJpaRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.CategoriaRepository;
 
 import static pe.uni.poo_v_g7.bibliotecaapp.util.ValidationUtils.*;
 
 @Service
 public class CategoriaService {
 
-    private final CategoriaJpaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
     private final CategoriaMapper categoriaMapper;
 
     public CategoriaService(
-            final CategoriaJpaRepository categoriaRepository,
+            final CategoriaRepository categoriaRepository,
             final CategoriaMapper categoriaMapper
     ) {
         this.categoriaRepository = categoriaRepository;

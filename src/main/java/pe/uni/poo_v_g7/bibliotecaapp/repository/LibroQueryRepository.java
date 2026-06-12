@@ -3,6 +3,7 @@ package pe.uni.poo_v_g7.bibliotecaapp.repository;
 import org.springframework.stereotype.Repository;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.LibroDto;
 
+@Deprecated
 @Repository
 public class LibroQueryRepository extends AbstractQueryRepository {
 

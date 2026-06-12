@@ -22,25 +22,25 @@ public class LibroService {
 
     private static final Pattern ISBN_PATTERN = Pattern.compile("\\d{10}|\\d{13}");
 
-    private final LibroJpaRepository libroRepository;
+    private final LibroRepository libroRepository;
 
-    private final EditorialJpaRepository editorialRepository;
+    private final EditorialRepository editorialRepository;
 
-    private final AutorJpaRepository autorRepository;
+    private final AutorRepository autorRepository;
 
-    private final CategoriaJpaRepository categoriaRepository;
+    private final CategoriaRepository categoriaRepository;
 
-    private final EtiquetaJpaRepository etiquetaRepository;
+    private final EtiquetaRepository etiquetaRepository;
 
     private final LibroMapper libroMapper;
 
     public LibroService(
-            LibroJpaRepository libroRepository,
+            LibroRepository libroRepository,
             LibroMapper libroMapper,
-            EditorialJpaRepository editorialRepository,
-            AutorJpaRepository autorRepository,
-            CategoriaJpaRepository categoriaRepository,
-            EtiquetaJpaRepository etiquetaRepository
+            EditorialRepository editorialRepository,
+            AutorRepository autorRepository,
+            CategoriaRepository categoriaRepository,
+            EtiquetaRepository etiquetaRepository
     ) {
 
         this.libroRepository = libroRepository;
@@ -86,14 +86,19 @@ public class LibroService {
             rollbackFor = Exception.class
     )
     public LibroDetailedDto registerLibro(RegistrarLibroRequest request) {
-        return libroMapper.toDetailedDto(registerLibroAndGetEntity(request));
+        return libroMapper.toDetailedDto(registerLibroEntity(request));
     }
 
     @Transactional(
             propagation = Propagation.REQUIRED,
             rollbackFor = Exception.class
     )
-    Libro registerLibroAndGetEntity(RegistrarLibroRequest request) {
+    Libro registerLibroEntity(RegistrarLibroRequest request) {
+        Libro libro = prepareLibroEntity(request);
+        return libroRepository.save(libro);
+    }
+
+    Libro prepareLibroEntity(RegistrarLibroRequest request) {
 
         Libro libro = new Libro();
 
@@ -181,7 +186,7 @@ public class LibroService {
             );
         }
 
-        return libroRepository.save(libro);
+        return libro;
     }
 
     @Transactional(
