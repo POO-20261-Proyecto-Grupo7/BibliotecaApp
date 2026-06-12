@@ -212,8 +212,8 @@ CREATE TABLE Ejemplar(
 -- TABLA: CLIENTE
 --------------------------------------------------------
 
-CREATE TABLE Cliente (
-    id_cliente INT IDENTITY(1,1) PRIMARY KEY,
+CREATE TABLE Socio (
+    id_socio INT IDENTITY(1,1) PRIMARY KEY,
     
     nombres VARCHAR(100) NOT NULL,
     apellidos VARCHAR(100) NOT NULL,
@@ -231,7 +231,7 @@ GO
 CREATE TABLE Prestamo(
     id_prestamo INT IDENTITY PRIMARY KEY,
 
-    id_cliente INT NOT NULL,
+    id_socio INT NOT NULL,
 
     fecha_prestamo DATETIME NOT NULL DEFAULT GETDATE(),
 
@@ -241,9 +241,9 @@ CREATE TABLE Prestamo(
 
     estado VARCHAR(20) NOT NULL,
 
-    CONSTRAINT FK_Prestamo_Cliente
-        FOREIGN KEY(id_cliente)
-        REFERENCES Cliente(id_cliente)
+    CONSTRAINT FK_Prestamo_Socio
+        FOREIGN KEY(id_socio)
+        REFERENCES Socio(id_socio)
 );
 GO
 
@@ -309,14 +309,14 @@ CREATE TABLE Venta (
 
     fecha_venta DATETIME NOT NULL DEFAULT GETDATE(),
 
-    id_cliente INT NOT NULL,
+    id_socio INT NOT NULL,
     id_empleado INT NOT NULL,
 
     total DECIMAL(10,2) NOT NULL DEFAULT 0,
 
-    CONSTRAINT FK_Venta_Cliente
-        FOREIGN KEY (id_cliente)
-        REFERENCES Cliente(id_cliente),
+    CONSTRAINT FK_Venta_Socio
+        FOREIGN KEY (id_socio)
+        REFERENCES Socio(id_socio),
 
     CONSTRAINT FK_Venta_Empleado
         FOREIGN KEY (id_empleado)
@@ -433,10 +433,10 @@ VALUES
 GO
 
 --------------------------------------------------------
--- DATOS DE PRUEBA: CLIENTES
+-- DATOS DE PRUEBA: SOCIOS
 --------------------------------------------------------
 
-INSERT INTO Cliente (
+INSERT INTO Socio (
     nombres,
     apellidos,
     dni,

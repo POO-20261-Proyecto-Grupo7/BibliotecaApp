@@ -27,11 +27,11 @@ public class Venta {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(
-            name = "id_cliente",
+            name = "id_socio",
             nullable = false,
-            foreignKey = @ForeignKey(name = "FK_Venta_Cliente")
+            foreignKey = @ForeignKey(name = "FK_Venta_Socio")
     )
-    private Cliente cliente;
+    private Socio socio;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(

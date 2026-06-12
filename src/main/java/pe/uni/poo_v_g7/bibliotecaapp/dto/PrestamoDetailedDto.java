@@ -19,13 +19,13 @@ public final class PrestamoDetailedDto extends PrestamoDto {
 
     public PrestamoDetailedDto(
             Integer idPrestamo,
-            ClienteDto cliente,
+            SocioDto socio,
             LocalDateTime fechaPrestamo,
             LocalDateTime fechaLimite,
             EstadoPrestamo estado,
             List<EjemplarDto> ejemplares
     ) {
-        super(idPrestamo, cliente, fechaPrestamo, fechaLimite, estado);
+        super(idPrestamo, socio, fechaPrestamo, fechaLimite, estado);
         this.ejemplares = ejemplares;
     }
 }

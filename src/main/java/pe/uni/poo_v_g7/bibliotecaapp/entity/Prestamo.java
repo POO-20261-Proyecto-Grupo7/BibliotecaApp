@@ -25,8 +25,8 @@ public class Prestamo {
     private Integer idPrestamo;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente", nullable = false)
-    private Cliente cliente;
+    @JoinColumn(name = "id_socio", nullable = false)
+    private Socio socio;
 
     @Column(name = "fecha_prestamo", nullable = false)
     private LocalDateTime fechaPrestamo;

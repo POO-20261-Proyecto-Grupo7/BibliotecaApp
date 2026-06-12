@@ -6,10 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.PrestamoDto;
 import pe.uni.poo_v_g7.bibliotecaapp.dto.RegistrarPrestamoPorEjemplarCodigoRequest;
 import pe.uni.poo_v_g7.bibliotecaapp.entity.*;
-import pe.uni.poo_v_g7.bibliotecaapp.mapper.ClienteMapper;
+import pe.uni.poo_v_g7.bibliotecaapp.mapper.SocioMapper;
 import pe.uni.poo_v_g7.bibliotecaapp.mapper.EjemplarMapper;
 import pe.uni.poo_v_g7.bibliotecaapp.mapper.PrestamoMapper;
-import pe.uni.poo_v_g7.bibliotecaapp.repository.ClienteRepository;
+import pe.uni.poo_v_g7.bibliotecaapp.repository.SocioRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.EjemplarRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.LibroRepository;
 import pe.uni.poo_v_g7.bibliotecaapp.repository.PrestamoRepository;
@@ -28,7 +28,7 @@ public class PrestamoService {
 
     private final PrestamoMapper prestamoMapper;
 
-    private final ClienteService clienteService;
+    private final SocioService socioService;
 
     private final EjemplarService ejemplarService;
 
@@ -38,8 +38,8 @@ public class PrestamoService {
             Clock clock,
             PrestamoRepository prestamoRepository,
             PrestamoMapper prestamoMapper,
-            ClienteRepository clienteRepository,
-            ClienteMapper clienteMapper,
+            SocioRepository socioRepository,
+            SocioMapper socioMapper,
             EjemplarRepository ejemplarRepository,
             EjemplarMapper ejemplarMapper,
             LibroRepository libroRepository
@@ -47,7 +47,7 @@ public class PrestamoService {
         this.clock = clock;
         this.prestamoRepository = prestamoRepository;
         this.prestamoMapper = prestamoMapper;
-        this.clienteService = new ClienteService(clienteRepository, clienteMapper);
+        this.socioService = new SocioService(socioRepository, socioMapper);
         this.ejemplarService = new EjemplarService(ejemplarRepository, ejemplarMapper);
         this.libroRepository = libroRepository;
     }
@@ -57,13 +57,13 @@ public class PrestamoService {
             rollbackFor = Exception.class
     )
     public PrestamoDto registerPrestamo(RegistrarPrestamoPorEjemplarCodigoRequest request) {
-        Integer idCliente = request.getIdCliente();
-        if (idCliente == null) {
-            throw new IllegalArgumentException("El ID de cliente no puede ser nulo.");
+        Integer idSocio = request.getIdSocio();
+        if (idSocio == null) {
+            throw new IllegalArgumentException("El ID de socio no puede ser nulo.");
         }
-        var cliente = clienteService.getClienteEntity(request.getIdCliente());
-        if (!cliente.getHabilitado()) {
-            throw new IllegalArgumentException("El cliente con ID '" + idCliente + "' no está habilitado para realizar préstamos.");
+        var socio = socioService.getSocioEntity(request.getIdSocio());
+        if (!socio.getHabilitado()) {
+            throw new IllegalArgumentException("El socio con ID '" + idSocio + "' no está habilitado para realizar préstamos.");
         }
         var requestEjemplares = request.getEjemplares();
         var ejemplares = ejemplarService.findAllEjemplarEntityForUpdate(requestEjemplares);
@@ -86,7 +86,7 @@ public class PrestamoService {
         LocalDateTime fechaLimite = fechaPrestamo.plusDays(14);
 
         Prestamo prestamo = new Prestamo();
-        prestamo.setCliente(cliente);
+        prestamo.setSocio(socio);
         prestamo.setFechaPrestamo(fechaPrestamo);
         prestamo.setFechaLimite(fechaLimite);
         prestamo.setEstado(EstadoPrestamo.ACTIVO);

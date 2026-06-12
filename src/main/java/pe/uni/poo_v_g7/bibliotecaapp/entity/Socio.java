@@ -4,25 +4,26 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import pe.uni.poo_v_g7.bibliotecaapp.dto.SocioDto;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Entidad de la tabla Cliente. Transferible mediante {@link pe.uni.poo_v_g7.bibliotecaapp.dto.ClienteDto}.
+ * Entidad de la tabla Socio. Transferible mediante {@link SocioDto}.
  */
 @Entity
-@Table(name = "Cliente")
+@Table(name = "Socio")
 @Getter
 @Setter
 @NoArgsConstructor
-public class Cliente {
+public class Socio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_cliente")
-    private Integer idCliente;
+    @Column(name = "id_socio")
+    private Integer idSocio;
 
     @Column(nullable = false, length = 100)
     private String nombres;
@@ -48,9 +49,9 @@ public class Cliente {
     @Column(nullable = false)
     private Boolean habilitado;
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "socio")
     private Set<Prestamo> prestamos = new HashSet<>();
 
-    @OneToMany(mappedBy = "cliente")
+    @OneToMany(mappedBy = "socio")
     private Set<Venta> ventas = new HashSet<>();
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 @NoArgsConstructor
 public final class RegistrarPrestamoPorEjemplarCodigoRequest {
 
-    private Integer idCliente;
+    private Integer idSocio;
 
     private Set<String> ejemplares;
 }

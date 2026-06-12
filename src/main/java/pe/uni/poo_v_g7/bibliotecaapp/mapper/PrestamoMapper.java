@@ -10,21 +10,21 @@ import java.util.Objects;
 @Component
 public class PrestamoMapper {
 
-    private final ClienteMapper clienteMapper;
+    private final SocioMapper socioMapper;
 
     private final EjemplarMapper ejemplarMapper;
 
     public PrestamoMapper(
-            ClienteMapper clienteMapper,
+            SocioMapper socioMapper,
             EjemplarMapper ejemplarMapper
     ) {
-        this.clienteMapper = clienteMapper;
+        this.socioMapper = socioMapper;
         this.ejemplarMapper = ejemplarMapper;
     }
 
     private PrestamoDto applyDto(PrestamoDto dto, Prestamo entity) {
         dto.setIdPrestamo(entity.getIdPrestamo());
-        dto.setCliente(clienteMapper.toDto(entity.getCliente()));
+        dto.setSocio(socioMapper.toDto(entity.getSocio()));
         dto.setFechaPrestamo(entity.getFechaPrestamo());
         dto.setFechaLimite(entity.getFechaLimite());
         dto.setEstado(entity.getEstado());

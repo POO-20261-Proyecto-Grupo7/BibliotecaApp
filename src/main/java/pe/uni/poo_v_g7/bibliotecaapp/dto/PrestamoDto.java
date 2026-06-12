@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public sealed class PrestamoDto permits PrestamoDetailedDto {
     Integer idPrestamo;
-    ClienteDto cliente;
+    SocioDto socio;
     LocalDateTime fechaPrestamo;
     LocalDateTime fechaLimite;
     EstadoPrestamo estado;
