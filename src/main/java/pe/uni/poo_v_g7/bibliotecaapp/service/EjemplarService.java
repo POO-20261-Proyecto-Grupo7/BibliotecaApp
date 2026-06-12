@@ -36,6 +36,22 @@ public class EjemplarService {
         return ejemplarMapper.toDto(getEjemplarEntity(idEjemplar));
     }
 
+    Ejemplar getEjemplarEntityByCodigo(String codigo) {
+        if (codigo == null) {
+            throw new IllegalArgumentException("El código de ejemplar no puede ser nulo.");
+        }
+        if (codigo.isBlank()) {
+            throw new IllegalArgumentException("El código de ejemplar no puese estar vacío.");
+        }
+        return ejemplarRepository.findByCodigo(codigo).orElseThrow(
+                () -> new IllegalArgumentException("El ejemplar con código '" + codigo + "' no existe.")
+        );
+    }
+
+    public EjemplarDto getEjemplarByCodigo(String codigo) {
+        return ejemplarMapper.toDto(getEjemplarEntityByCodigo(codigo));
+    }
+
     List<Ejemplar> findAllEjemplarEntityForUpdate(Set<String> codigosEjemplares) {
         if (codigosEjemplares == null) {
             throw new IllegalArgumentException("La collección de códigos de ejemplares no puede ser nula.");

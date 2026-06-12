@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 public final class EjemplarDto {
 
     private Integer idEjemplar;
+    private UbicacionDto ubicacion;
     private LibroDto libro;
     private String codigo;
     private String estado;

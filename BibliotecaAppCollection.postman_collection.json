@@ -949,6 +949,43 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Ubicacion",
+      "item": [
+        {
+          "name": "AsignarUbicacionEjemplar",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"codigoEjemplar\": \"CC-0001\",\r\n    \"sede\": \"Cipres\",\r\n    \"pasillo\": \"Corredor 1\",\r\n    \"estante\": \"Estante B\",\r\n    \"nivel\": 3\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/bbapp/api/v1/ubicacion/asignar-ubicacion-ejemplar",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "bbapp",
+                "api",
+                "v1",
+                "ubicacion",
+                "asignar-ubicacion-ejemplar"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
     }
   ]
 }

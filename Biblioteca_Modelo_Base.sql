@@ -184,10 +184,33 @@ CREATE TABLE Libro_Categoria(
         REFERENCES Categoria(id_categoria)
 );
 
+CREATE TABLE Ubicacion(
+    id_ubicacion INT IDENTITY PRIMARY KEY,
+
+    sede VARCHAR(100) NOT NULL,
+
+    pasillo VARCHAR(50) NOT NULL,
+
+    estante VARCHAR(50) NOT NULL,
+
+    nivel VARCHAR(50) NOT NULL,
+
+    CONSTRAINT UQ_Ubicacion
+        UNIQUE(
+            sede,
+            pasillo,
+            estante,
+            nivel
+        )
+);
+GO
+
 CREATE TABLE Ejemplar(
     id_ejemplar INT IDENTITY PRIMARY KEY,
 
     id_libro INT NOT NULL,
+
+    id_ubicacion INT,
 
     codigo VARCHAR(50) UNIQUE NOT NULL,
 
@@ -205,7 +228,11 @@ CREATE TABLE Ejemplar(
                 'PERDIDO',
                 'DANIADO'
             )
-        )
+        ),
+
+    CONSTRAINT FK_Ejemplar_Ubicacion
+        FOREIGN KEY(id_ubicacion)
+        REFERENCES Ubicacion(id_ubicacion)
 );
 
 --------------------------------------------------------
@@ -260,6 +287,46 @@ CREATE TABLE Prestamo_Ejemplar(
     CONSTRAINT FK_PE_Ejemplar
         FOREIGN KEY(id_ejemplar)
         REFERENCES Ejemplar(id_ejemplar)
+);
+GO
+
+CREATE TABLE RenovacionPrestamo(
+    id_renovacion INT IDENTITY PRIMARY KEY,
+
+    id_prestamo INT NOT NULL,
+
+    fecha_renovacion DATETIME NOT NULL DEFAULT GETDATE(),
+
+    fecha_limite_anterior DATETIME NOT NULL,
+
+    fecha_limite_nueva DATETIME NOT NULL,
+
+    token VARCHAR(200) NOT NULL UNIQUE,
+
+    utilizado BIT NOT NULL DEFAULT 0,
+
+    fecha_utilizacion DATETIME NULL,
+
+    CONSTRAINT FK_RenovacionPrestamo_Prestamo
+        FOREIGN KEY(id_prestamo)
+        REFERENCES Prestamo(id_prestamo)
+);
+GO
+
+CREATE TABLE NotificacionPrestamo(
+    id_notificacion INT IDENTITY PRIMARY KEY,
+
+    id_prestamo INT NOT NULL,
+
+    canal VARCHAR(20) NOT NULL,
+
+    fecha_envio DATETIME NOT NULL,
+
+    exito BIT NOT NULL,
+
+    CONSTRAINT FK_NotificacionPrestamo_Prestamo
+        FOREIGN KEY(id_prestamo)
+        REFERENCES Prestamo(id_prestamo)
 );
 GO
 

@@ -9,10 +9,13 @@ import pe.uni.poo_v_g7.bibliotecaapp.entity.Ejemplar;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface EjemplarRepository
         extends JpaRepository<Ejemplar, Integer> {
+
+    Optional<Ejemplar> findByCodigo(String codigo);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""

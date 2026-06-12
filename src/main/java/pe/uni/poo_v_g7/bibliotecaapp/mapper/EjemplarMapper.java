@@ -9,15 +9,19 @@ public class EjemplarMapper {
 
     private final LibroMapper libroMapper;
 
+    private final UbicacionMapper ubicacionMapper;
+
     public EjemplarMapper(
             EditorialMapper editorialMapper
     ) {
         this.libroMapper = new LibroMapper(editorialMapper);
+        this.ubicacionMapper = new UbicacionMapper(this);
     }
 
     public EjemplarDto toDto(Ejemplar ejemplar) {
         return new EjemplarDto(
                 ejemplar.getIdEjemplar(),
+                ejemplar.getUbicacion() == null ? null : ubicacionMapper.toDto(ejemplar.getUbicacion()),
                 libroMapper.toDto(ejemplar.getLibro()),
                 ejemplar.getCodigo(),
                 ejemplar.getEstado().toString()

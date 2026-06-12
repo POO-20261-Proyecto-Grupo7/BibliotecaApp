@@ -24,6 +24,12 @@ public class Ejemplar {
     private Integer idEjemplar;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(
+            name = "id_ubicacion"
+    )
+    private Ubicacion ubicacion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_libro", nullable = false)
     private Libro libro;
 
